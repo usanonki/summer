@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>해피데이</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: #000000;
+        font-family:
+          '맑은 고딕',
+          Malgun Gothic,
+          sans-serif;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+      }
+
+      .frame {
+        width: 100%;
+        max-width: 720px;
+
+        aspect-ratio: 16 / 9;
+
+        position: relative;
+
+        border: 2px solid rgba(255, 255, 255, 0.95);
+        padding: 1px;
+
+        background: #fff;
+
+        overflow: hidden;
+      }
+
+      .background {
+        width: 100%;
+        height: 100%;
+        background: url('https://64.media.tumblr.com/b32252af7bc62827797fa49d0c597197/55777499e6ff8d3d-28/s540x810/d2b24802a30e84cb1a16c52b4cee3e0325a8d10a.jpg')
+          center center no-repeat;
+        background-size: cover;
+        position: relative;
+      }
+
+      .text-layer {
+        position: absolute;
+        left: 45px;
+        top: 85px;
+        width: 300px;
+        color: #ffffff;
+        text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.95);
+        line-height: 1.7;
+      }
+
+      .player {
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+
+        width: 170px;
+        height: 26px;
+
+        opacity: 0;
+        transition: opacity 0.5s ease;
+      }
+
+      .frame:hover .player {
+        opacity: 0.72;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="frame">
+      <div class="background">
+        <!-- 텍스트 -->
+        <div class="text-layer">
+          <p style="font-size: 19px; font-weight: bold">
+            안녕하세요, 해피데이!
+          </p>
+        </div>
+
+        <!-- 오디오 -->
+        <div class="audio-box">
+          <audio controls autoplay loop class="player">
+            <source src="https://cldup.com/ygTjj6ToPP.MP3" type="audio/mpeg" />
+            Your browser does not support the audio element.
+          </audio>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
