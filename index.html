@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이미지 프레임 합성</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nanum+Brush+Script&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #e2e2d4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+        position: relative;
+        /* 고정 픽셀(1280x720) 대신 뷰포트 100%를 꽉 채웁니다 */
+        width: 100vw;
+        height: 100vh;
+        box-shadow: 0 0 20px rgba(0,0,0,0.8);
+        overflow: hidden;
+    }
+
+        /* MP4 배경 비디오 */
+        .video-background {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60%;       /* ← 크기 조절 */
+            height: auto;
+            z-index: 0;
+        }
+
+        /* PNG 오버레이 */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://64.media.tumblr.com/54eea181fbbbd645dde26e33704fcadc/9c0de38e4a914930-a6/s540x810/3c69e4d0568550b62637d841e0d2300b2118fd9b.pnj');
+            background-size: cover;
+            background-position: center;
+            pointer-events: none;
+            z-index: 1;
+        }
+     /* 콘텐츠 영역 - 가장 위에 표시 */
+        .content {
+            position: absolute;
+            top: 10%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;                    /* ← 가장 중요: 오버레이 위 */
+            color: rgb(255, 255, 255);
+            text-align: center;
+            width: 80%;
+            font-family: 'Nanum Brush Script', cursive;
+            text-shadow: 0 0 15px rgba(0,0,0,0.9),
+                         0 0 25px rgba(0,0,0,0.7);
+            line-height: 0.7;
+            /* 핵심: 흰색 글자 뒤로 은은한 와인빛(rgba(60, 10, 20)) 그림자가 감돌아 장미꽃과 찰떡처럼 어울립니다 */
+            text-shadow: 0 0 15px rgba(60, 10, 20, 0.95),
+                 0 0 25px rgba(0, 0, 0, 0.7);
+        }
+
+        .content p {
+            margin: 15px 0;
+            font-size: clamp(1.8rem, 4vw, 3.5rem);
+        }
+
+        /* 커스텀 오디오 플레이어 */
+        #player {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            height: 20px;   /* 고정 높이 */
+            padding: 0px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2.5px solid #f0d8a3;
+            border-radius: 25px;
+            backdrop-filter: blur(5px);
+            color: white;
+        }
+
+        #player button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 0 4px;
+        }
+
+        #player button:hover {
+            opacity: 0.8;
+        }
+
+        #progressBar, #volumeBar {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 4px;
+            border-radius: 2px;
+            background: rgba(255,255,255,0.4);
+            outline: none;
+            cursor: pointer;
+        }
+
+        #progressBar {
+            width: 160px;
+        }
+
+        #volumeBar {
+            width: 70px;
+        }
+
+        #progressBar::-webkit-slider-thumb,
+        #volumeBar::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+        }
+
+        #timeDisplay {
+            font-size: 12px;
+            min-width: 35px;
+            color: white;
+            font-family: monospace;
+        }
+
+        .volume-icon {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- 페이지 콘텐츠 -->
+<div class="content">
+    <p>당신이 마주할 모든 순간이 동화처럼</p>
+    <p>언제나 웃음 짓는 즐거움으로 가득하길.</p>
+</div>
+
+        <!-- MP4 배경 비디오 -->
+        <video class="video-background" autoplay muted loop playsinline>
+            <source src="https://va.media.tumblr.com/tumblr_tfisv19OPH1b09833.mp4" type="video/mp4">
+        </video>
+
+        <!-- PNG 오버레이 (중앙 투명) -->
+        <div class="overlay"></div>
+
+    </div>
+
+    <!-- 커스텀 오디오 플레이어 -->
+    <div id="player">
+        <button id="playBtn" onclick="togglePlay()">⏸</button>
+        <input type="range" id="progressBar" value="0" max="100" step="0.1">
+        <span id="timeDisplay">0:00</span>
+        <span class="volume-icon">🔈</span>
+        <input type="range" id="volumeBar" value="50" max="100" step="1">
+    </div>
+
+    <audio id="bgm" autoplay loop>
+        <source src="https://blog.kakaocdn.net/dn/dHWxf5/btr0Hy3TGZc/nLQhEAcCf427EX0R1BlSO0/tfile.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const audio = document.getElementById('bgm');
+        audio.volume = 0.5;   /* 0.0 ~ 1.0 사이 값 */
+        const playBtn = document.getElementById('playBtn');
+        const progressBar = document.getElementById('progressBar');
+        const volumeBar = document.getElementById('volumeBar');
+        const timeDisplay = document.getElementById('timeDisplay');
+
+        // 재생 / 정지 토글
+        function togglePlay() {
+            if (audio.paused) {
+                audio.play();
+                playBtn.textContent = '⏸';
+            } else {
+                audio.pause();
+                playBtn.textContent = '▶';
+            }
+        }
+
+        // 진행바 업데이트
+        audio.addEventListener('timeupdate', () => {
+            if (audio.duration) {
+                const progress = (audio.currentTime / audio.duration) * 100;
+                progressBar.value = progress;
+
+                const mins = Math.floor(audio.currentTime / 60);
+                const secs = Math.floor(audio.currentTime % 60).toString().padStart(2, '0');
+                timeDisplay.textContent = `${mins}:${secs}`;
+            }
+        });
+
+        // 진행바 클릭으로 이동
+        progressBar.addEventListener('input', () => {
+            if (audio.duration) {
+                audio.currentTime = (progressBar.value / 100) * audio.duration;
+            }
+        });
+
+        // 볼륨 조절
+        volumeBar.addEventListener('input', () => {
+            audio.volume = volumeBar.value / 100;
+        });
+    </script>
+
+</body>
+</html>
