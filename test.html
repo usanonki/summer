@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>비우며 사는 인생</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', system-ui, sans-serif;
+        }
+        .poem-text {
+            line-height: 1.8;
+            text-align: center;
+        }
+        .image-container {
+            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.5);
+        }
+    </style>
+</head>
+<body class="bg-black text-white min-h-screen flex flex-col items-center justify-center py-12 px-4">
+    <div class="max-w-2xl w-full">
+        <!-- 이미지 영역 -->
+        <div class="image-container mb-12 rounded-xl overflow-hidden">
+            <img id="mainImage" 
+                 src="https://picsum.photos/id/1015/1200/800" 
+                 alt="바다 위 부두" 
+                 class="w-full h-auto object-cover">
+        </div>
+
+        <!-- 제목 -->
+        <div class="text-center mb-8">
+            <h1 id="title" class="text-3xl font-light tracking-widest mb-2">
+                비우며 사는 인생
+            </h1>
+            <p id="subtitle" class="text-gray-400 text-sm">
+                / 蠶絲 道지현
+            </p>
+        </div>
+
+        <!-- 본문 -->
+        <div id="poem" class="poem-text text-gray-300 text-[17px] leading-relaxed space-y-8 mb-16">
+            <p>과유불급이라고<br>욕심은 화를 부른다고 하는데<br>무엇 때문에 그렇게 욕심을 부렸나<br>지금 생각하면 참 우매했다</p>
+            
+            <p>재물에 대한 욕심으로<br>양심을 속이고 영혼을 팔아먹고<br>명예까지 더럽혀가며<br>마냥 채우기에 급급했었지</p>
+            
+            <p>얼마 남지 않는 인생이 되니<br>모든 것이 부질없고<br>움켜쥐고 있는 것이 거추장스러워<br>하나씩 비우고 내려놓아</p>
+            
+            <p>새털같이 가벼운 마음으로<br>가슴에 걸리지 않는 바람처럼<br>비운 것을 또 비워서<br>한 점의 먼지처럼 가볍게 사라지리</p>
+        </div>
+
+        <!-- 오디오 플레이어 -->
+        <div class="w-full max-w-md mx-auto bg-zinc-900 rounded-2xl p-6">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center text-2xl flex-shrink-0">
+                    🎵
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p id="audioTitle" class="text-sm font-medium text-white truncate">배경 음악</p>
+                    <p class="text-xs text-gray-500">Ambient Piano</p>
+                </div>
+            </div>
+            
+            <audio id="audioPlayer" controls class="w-full mt-6 accent-blue-500">
+                <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+        </div>
+
+        <div class="text-center text-xs text-gray-600 mt-12">
+            <p>이미지와 텍스트를 쉽게 변경하여 사용하세요</p>
+        </div>
+    </div>
+
+    <script>
+        // Tailwind script already loaded via CDN
+        
+        // 이미지 변경 예시 함수
+        function changeImage(newSrc) {
+            document.getElementById('mainImage').src = newSrc;
+        }
+        
+        // 제목 변경
+        function changeTitle(newTitle, newSubtitle) {
+            document.getElementById('title').textContent = newTitle;
+            if (newSubtitle) {
+                document.getElementById('subtitle').textContent = newSubtitle;
+            }
+        }
+        
+        // 본문 변경
+        function changePoem(newHtml) {
+            document.getElementById('poem').innerHTML = newHtml;
+        }
+        
+        // 오디오 변경
+        function changeAudio(src, title = "배경 음악") {
+            const audio = document.getElementById('audioPlayer');
+            const source = audio.querySelector('source');
+            source.src = src;
+            document.getElementById('audioTitle').textContent = title;
+            audio.load();
+        }
+        
+        // 사용 예시 (콘솔에서 테스트 가능)
+        console.log("%c✅ HTML 준비 완료! 아래 함수들로 쉽게 커스터마이징하세요:", "color: #22d3ee; font-weight: bold");
+        console.log("changeImage('새로운이미지경로.jpg')");
+        console.log("changeTitle('새 제목', '/ 작가명')");
+        console.log("changeAudio('오디오파일.mp3', '새 음악 제목')");
+    </script>
+</body>
+</html>
