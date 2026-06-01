@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>June Greetings</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nanum+Brush+Script&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        height: 100%;
+      }
+
+      /* 🌟 GIF를 배경으로 — 가장 밝고 예쁜 느낌 유지 */
+      body {
+        background: url('https://contents.usadisk.com/VqJdsnuhiVWAGy1EhoYFaIdUwx8=/a0fbfc8ab1aa4baf8298fd7290607011/clubs_clubusa_126843439834086')
+          no-repeat center center fixed;
+        background-size: cover;
+      }
+
+      /* ✨ mp4 효과 레이어 — GIF 위에서 확실히 보이게 */
+      .effect-layer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        overflow: hidden;
+      }
+
+      .effect-layer video {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+
+        opacity: 0.75;
+        mix-blend-mode: screen;
+        filter: brightness(1.3);
+      }
+
+      /* ✨ 기존 타이틀 제목 (중앙 상단) */
+      h1 {
+        position: fixed;
+        top: 2%;
+        right: 10%;
+        transform: translateX(-50%);
+        font-family: 'Nanum Brush Script', cursive;
+        font-size: 4.2rem;
+        font-weight: 700;
+
+        background: linear-gradient(90deg, #e1ee70, #ffe6ff, #b3e5ff, #ffd6f5);
+        background-size: 300% 300%;
+        -webkit-background-clip: text;
+        color: transparent;
+
+        animation:
+          fadeIn 2.2s ease-out forwards,
+          shine 6s ease-in-out infinite,
+          glow 4s ease-in-out infinite;
+
+        pointer-events: none;
+        white-space: nowrap;
+        z-index: 10;
+      }
+
+      /* ✍️ 새롭게 추가된 6월 인사말 문구 스타일 (좌측 흰색 여백 배치) */
+      .greeting-container {
+        position: fixed;
+        top: 20%;             /* 상단에서 25% 내려온 위치 */
+        left: 6%;             /* 좌측 여백 공간에 안착 */
+        font-family: 'Nanum Brush Script', cursive;
+        font-size: 1.6rem;    /* 본문으로 읽기 좋은 크기 */
+        line-height: 1.3;     /* 줄간격을 넓혀 가독성 확보 */
+        color: #4a3b32;       /* 이미지의 커피, 나무 받침대와 어우러지는 따뜻한 브라운 톤 */
+        text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8); /* 흰 배경 위에서 자조적으로 묻히지 않게 살짝 그림자 효과 */
+        z-index: 11;
+        animation: fadeIn 3s ease-out forwards; /* 부드럽게 나타나는 효과 */
+      }
+
+      .greeting-p {
+        margin-bottom: 25px;  /* 단락과 단락 사이의 간격 */
+      }
+
+      @keyframes fadeIn {
+        0% {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes shine {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      @keyframes glow {
+        0% {
+          text-shadow: 0 0 10px rgba(255, 200, 255, 0.4);
+        }
+        50% {
+          text-shadow: 0 0 25px rgba(255, 150, 255, 0.8);
+        }
+        100% {
+          text-shadow: 0 0 10px rgba(255, 200, 255, 0.4);
+        }
+      }
+
+      /* 🎵 오디오 플레이어 */
+      .audio-fixed {
+        position: fixed;
+        left: 20px;
+        bottom: 20px;
+        z-index: 9999;
+      }
+
+      .audio-fixed audio {
+        border: 2.5px solid #c5d698a2;
+        border-radius: 25px;
+        width: 250px;
+        height: 20px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- ✨ 타이틀 제목 -->
+    <h1>해피 데이</h1>
+
+    <!-- ✍️ 6월 인사말 본문 (좌측 흰색 여백에 표시됨) -->
+    <div class="greeting-container">
+      <div class="greeting-p">
+        눈부신 햇살과 푸른 하늘이 반겨주는<br>
+        6월을 맞아 해피데이 회원님들께 반가운 인사를 건냅니다.
+      </div>
+      <div class="greeting-p">
+        계절의 변화가 주는 설렘을 혼자 즐기기보다,<br>
+        회원 여러분과 함께 나누면 기쁨이 배가 될 거 같아요.
+      </div>
+      <div class="greeting-p">
+        소소한 행복과 아름다운 선율을 나누는<br>
+        행복한 6월이 되었으면 좋겠습니다.<br><br>
+        마에스트라
+      </div>
+    </div>
+
+    <!-- ✨ mp4 효과 레이어 -->
+    <div class="effect-layer">
+      <video
+        src=""
+        autoplay
+        loop
+        muted
+      ></video>
+      <video
+        src="https://usanonki.github.io/photo/sky2.mp4"
+        autoplay
+        loop
+        muted
+      ></video>
+    </div>
+
+    <!-- 🎵 오디오 -->
+    <div class="audio-fixed">
+      <audio
+        id="mainAudio"
+        src="https://blog.kakaocdn.net/dn/HIlj1/btrzuzgtAa7/m1mKkmh6Az1RuR9deHqLf0/tfile.mp3"
+        controls
+        loop
+      ></audio>
+    </div>
+
+    <script>
+      const audio = document.getElementById('mainAudio');
+      audio.volume = 0.3;
+
+      document.body.addEventListener('click', () => audio.play(), {
+        once: true,
+      });
+    </script>
+  </body>
+</html>
