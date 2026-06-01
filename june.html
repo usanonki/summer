@@ -14,22 +14,34 @@
     />
 
     <style>
-      html,
-      body {
+      html, body {
         margin: 0;
         padding: 0;
-        overflow: hidden;
+        width: 100%;
         height: 100%;
+        overflow: hidden;
+        background-color: #000;
+        /* 플렉스 박스로 화면 정중앙 정렬 */
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
 
-      /* 🌟 GIF를 배경으로 — 가장 밝고 예쁜 느낌 유지 */
-      body {
-        background: url('https://contents.usadisk.com/VqJdsnuhiVWAGy1EhoYFaIdUwx8=/a0fbfc8ab1aa4baf8298fd7290607011/clubs_clubusa_126843439834086')
-          no-repeat center center fixed;
+      /* 🌟 핵심 해결사: 원본 이미지의 감성적 비율(약 16:9)을 가진 고정 박스 생성 */
+      .card-stage {
+        position: relative;
+        /* 극단적으로 좁은 iframe 안에서도 꽉 차되 비율이 깨지지 않게 유연하게 설정 */
+        width: 100vw;
+        height: 58vw; /* 16:9 비율 유지 */
+        max-width: 100%;
+        max-height: 100%;
+        
+        /* 배경 지정 */
+        background: url('https://contents.usadisk.com/VqJdsnuhiVWAGy1EhoYFaIdUwx8=/a0fbfc8ab1aa4baf8298fd7290607011/clubs_clubusa_126843439834086') no-repeat center center;
         background-size: cover;
       }
 
-      /* ✨ mp4 효과 레이어 — GIF 위에서 확실히 보이게 */
+      /* ✨ mp4 효과 레이어 - 스테이지 내부에 종속 */
       .effect-layer {
         position: absolute;
         top: 0;
@@ -45,21 +57,21 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
-
         opacity: 0.75;
         mix-blend-mode: screen;
         filter: brightness(1.3);
       }
 
-      /* ✨ 기존 타이틀 제목 (중앙 상단) */
+      /* ✨ 타이틀 제목 - 무조건 스테이지 가로폭(cqi 또는 cwv 대용인 vmin)에 비례 */
       h1 {
-        position: fixed;
-        top: 2%;
-        right: 10%;
+        position: absolute;
+        top: 6%;
+        left: 85%;
         transform: translateX(-50%);
         font-family: 'Nanum Brush Script', cursive;
-        font-size: 4.2rem;
+        font-size: 8vmin; /* 부모 크기에 맞춰 완벽하게 비례 축소 */
         font-weight: 700;
+        margin: 0;
 
         background: linear-gradient(90deg, #e1ee70, #ffe6ff, #b3e5ff, #ffd6f5);
         background-size: 300% 300%;
@@ -76,127 +88,99 @@
         z-index: 10;
       }
 
-      /* ✍️ 새롭게 추가된 6월 인사말 문구 스타일 (좌측 흰색 여백 배치) */
+      /* ✍️ 6월 인사말 본문 - 부모 창 높이/너비 중 작은 쪽(vmin)에 완벽 동기화 */
       .greeting-container {
-        position: fixed;
-        top: 20%;             /* 상단에서 25% 내려온 위치 */
-        left: 6%;             /* 좌측 여백 공간에 안착 */
+        position: absolute;
+        top: 25%;             
+        left: 5%;             
         font-family: 'Nanum Brush Script', cursive;
-        font-size: 1.6rem;    /* 본문으로 읽기 좋은 크기 */
-        line-height: 1.3;     /* 줄간격을 넓혀 가독성 확보 */
-        color: #4a3b32;       /* 이미지의 커피, 나무 받침대와 어우러지는 따뜻한 브라운 톤 */
-        text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8); /* 흰 배경 위에서 자조적으로 묻히지 않게 살짝 그림자 효과 */
+        font-size: 5vmin;    /* 🌟 어떤 좁은 iframe에 갇혀도 글자가 절대 깨지거나 튀어나가지 않음 */
+        line-height: 1.4;     
+        color: #4a3b32;       
+        text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8); 
         z-index: 11;
-        animation: fadeIn 3s ease-out forwards; /* 부드럽게 나타나는 효과 */
+        animation: fadeIn 3s ease-out forwards; 
       }
 
       .greeting-p {
-        margin-bottom: 25px;  /* 단락과 단락 사이의 간격 */
+        margin-bottom: 3vmin;  
       }
 
       @keyframes fadeIn {
-        0% {
-          opacity: 0;
-          transform: translateY(10px);
-        }
-        100% {
-          opacity: 1;
-          transform: translateY(0);
-        }
+        0% { opacity: 0; transform: translateY(5px); }
+        100% { opacity: 1; transform: translateY(0); }
       }
 
       @keyframes shine {
-        0% {
-          background-position: 0% 50%;
-        }
-        50% {
-          background-position: 100% 50%;
-        }
-        100% {
-          background-position: 0% 50%;
-        }
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
       }
 
       @keyframes glow {
-        0% {
-          text-shadow: 0 0 10px rgba(255, 200, 255, 0.4);
-        }
-        50% {
-          text-shadow: 0 0 25px rgba(255, 150, 255, 0.8);
-        }
-        100% {
-          text-shadow: 0 0 10px rgba(255, 200, 255, 0.4);
-        }
+        0% { text-shadow: 0 0 10px rgba(255, 200, 255, 0.4); }
+        50% { text-shadow: 0 0 25px rgba(255, 150, 255, 0.8); }
+        100% { text-shadow: 0 0 10px rgba(255, 200, 255, 0.4); }
       }
 
-      /* 🎵 오디오 플레이어 */
+      /* 🎵 오디오 플레이어 - 작은 무대 우하단에 배치 */
       .audio-fixed {
-        position: fixed;
-        left: 20px;
-        bottom: 20px;
+        position: absolute;
+        left: 3%;
+        bottom: 5%;
         z-index: 9999;
       }
 
       .audio-fixed audio {
-        border: 2.5px solid #c5d698a2;
+        border: 2px solid #d1cbd1;
         border-radius: 25px;
-        width: 250px;
+        width: 180px; /* 아주 작은 창에서도 삐져나가지 않게 폭 축소 */
         height: 20px;
       }
     </style>
   </head>
 
   <body>
-    <!-- ✨ 타이틀 제목 -->
-    <h1>해피 데이</h1>
 
-    <!-- ✍️ 6월 인사말 본문 (좌측 흰색 여백에 표시됨) -->
-    <div class="greeting-container">
-      <div class="greeting-p">
-        눈부신 햇살과 푸른 하늘이 반겨주는<br>
-        6월을 맞아 해피데이 회원님들께 반가운 인사를 건냅니다.
-      </div>
-      <div class="greeting-p">
-        계절의 변화가 주는 설렘을 혼자 즐기기보다,<br>
-        회원 여러분과 함께 나누면 기쁨이 배가 될 거 같아요.
-      </div>
-      <div class="greeting-p">
-        소소한 행복과 아름다운 선율을 나누는<br>
-        행복한 6월이 되었으면 좋겠습니다.<br><br>
-        마에스트라
-      </div>
-    </div>
+    <!-- 🌟 사이트가 강제 지정한 iframe 주머니 속에 꽉 들어맞는 가상 캔버스 -->
+    <div class="card-stage">
+      
+      <!-- ✨ 타이틀 제목 -->
+      <h1>해피 데이</h1>
 
-    <!-- ✨ mp4 효과 레이어 -->
-    <div class="effect-layer">
-      <video
-        src=""
-        autoplay
-        loop
-        muted
-      ></video>
-      <video
-        src="https://usanonki.github.io/photo/sky2.mp4"
-        autoplay
-        loop
-        muted
-      ></video>
-    </div>
+      <!-- ✍️ 6월 인사말 본문 -->
+      <div class="greeting-container">
+        <div class="greeting-p">
+          눈부신 햇살과 푸른 하늘이 반겨주는<br>
+          6월을 맞아 해피데이 회원님들께 반가운 인사를 건냅니다.
+        </div>
+        <div class="greeting-p">
+          계절의 변화가 주는 설렘을 혼자 즐기기보다,<br>
+          회원 여러분과 함께 나누면 기쁨이 배가 될 거 같아요.
+        </div>
+        <div class="greeting-p">
+          소소한 행복과 아름다운 선율을 나누는<br>
+          행복한 6월이 되었으면 좋겠습니다.<br><br>
+          마에스트라
+        </div>
+      </div>
 
-    <!-- 🎵 오디오 -->
-    <div class="audio-fixed">
-      <audio
-        id="mainAudio"
-        src="https://blog.kakaocdn.net/dn/HIlj1/btrzuzgtAa7/m1mKkmh6Az1RuR9deHqLf0/tfile.mp3"
-        controls
-        autoplay
-        loop
-      ></audio>
+      <!-- ✨ mp4 효과 레이어 -->
+      <div class="effect-layer">
+        <video src="" autoplay loop muted></video>
+        <video src="https://usanonki.github.io/photo/sky2.mp4" autoplay loop muted></video>
+      </div>
+
+      <!-- 🎵 오디오 -->
+      <div class="audio-fixed">
+        <audio id="mainAudio" src="https://blog.kakaocdn.net/dn/HIlj1/btrzuzgtAa7/m1mKkmh6Az1RuR9deHqLf0/tfile.mp3" controls autoplay loop></audio>
+      </div>
+
     </div>
 
     <script>
       const audio = document.getElementById('mainAudio');
-      audio.volume = 0.3;
+      audio.volume = 0.2;
 
       document.body.addEventListener('click', () => audio.play(), {
         once: true,
@@ -204,3 +188,5 @@
     </script>
   </body>
 </html>
+       
+       
