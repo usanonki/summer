@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Macarena</title>
+
+    <!-- Google Fonts Preload + Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Nanum Brush Script -->
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Brush+Script&display=swap" rel="stylesheet">
+
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background-color: #000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative; /* 자식 요소들의 절대 위치 기준점 설정 */
+      }
+
+      /* mp4 효과 레이어 */
+      .effect-layer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        overflow: hidden;
+        z-index: 1; /* 영상이 뒤로 가도록 설정 */
+      }
+
+      .effect-layer video {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.75;
+        mix-blend-mode: screen;
+        filter: brightness(1.3);
+      }    
+
+      /* 오디오 플레이어 위치 및 스타일 수정 */
+      .audio-inline {
+        position: absolute; /* 절대 위치 사용 */
+        bottom: 30px;       /* 화면 하단에서 30px 띄움 */
+        left: 50%;          /* 화면 가로 중앙 정렬 시작점 */
+        transform: translateX(-50%); /* 정확한 가로 중앙 정렬 보정 */
+        z-index: 10;        /* 영상보다 위에 보이도록 설정 */
+      }
+
+      .audio-inline audio {
+        border: 2px solid #5e665e;
+        border-radius: 25px;
+        width: 38vmin;       
+        height: 23px;
+        display: block;
+      }
+    </style>
+  </head>
+  
+  <body>
+
+    <!-- mp4 효과 레이어 -->
+    <div class="effect-layer">
+      <!-- 빈 video 태그 삭제 및 정상 파일만 유지 -->
+      <video src="https://64.media.tumblr.com/d55f5877b8dda95d72a914748547f8b5/4720b5e6a17821da-eb/s720/8d171cf883f049ba653469ea45c4fcc3fa2bdbec.mov" autoplay loop muted playsinline></video>
+    </div>
+
+    <!-- 오디오 플레이어 (하단에 배치하기 위해 구조 정리) -->
+    <div class="audio-inline">
+      <audio id="mainAudio" 
+        src="https://blog.kakaocdn.net/dn/yZVDN/btroDPUE5Y2/DEkXxcFmbwenCnzXPRM0d1/tfile.mp3"
+        controls autoplay loop>
+      </audio>
+    </div>
+
+    <script>
+      const audio = document.getElementById('mainAudio');
+      audio.volume = 0.4;
+
+      // 화면 아무 곳이나 클릭하면 음악 재생 시작
+      document.body.addEventListener('click', () => {
+          audio.play().catch(err => console.log("재생 오류:", err));
+      }, { once: true });
+    </script>
+  </body>
+</html>
