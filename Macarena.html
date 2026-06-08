@@ -48,22 +48,22 @@
         filter: brightness(1.3);
       }    
 
-      /* 오디오 플레이어 위치 및 스타일 수정 */
       .audio-inline {
-        position: absolute; /* 절대 위치 사용 */
-        bottom: 30px;       /* 화면 하단에서 30px 띄움 */
-        left: 50%;          /* 화면 가로 중앙 정렬 시작점 */
-        transform: translateX(-50%); /* 정확한 가로 중앙 정렬 보정 */
-        z-index: 10;        /* 영상보다 위에 보이도록 설정 */
-      }
+  position: absolute;
+  bottom: 5%;         /* 고정 30px 대신 화면 높이의 5%만큼 항상 띄움 */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  margin-top: -0.5vmin;
+}
 
-      .audio-inline audio {
-        border: 2px solid #5e665e;
-        border-radius: 25px;
-        width: 38vmin;       
-        height: 23px;
-        display: block;
-      }
+.audio-inline audio {
+  border: 2px solid #89bd8c;
+  border-radius: 25px;
+  width: 38vmin;       
+  height: 3vmin;      /* 고정 23px 대신 화면 크기에 비례해서 늘어나고 줄어듦 */
+  display: block;
+}
     </style>
   </head>
   
