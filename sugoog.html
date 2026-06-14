@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>수국-오,캐롤</title>
+
+    <!-- Google Fonts Preload + Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Nanum Brush Script -->
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Brush+Script&display=swap" rel="stylesheet">
+
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background-color: #000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      /* 원본 이미지의 비율 유지 고정 박스 */
+      .card-stage {
+        position: relative;
+        width: 100vw;
+        height: 58vw; /* 16:9 비율 유지 */
+        max-width: 100%;
+        max-height: 100%;
+        background: url('https://64.media.tumblr.com/ba73aab0eeffd8db91b8554e9ce07eaa/b10bae0d58af8eef-85/s540x810/21bcd731d675621d154bc2874f93f406e9c0c597.jpg') no-repeat center center;
+        background-size: cover;
+      }
+
+      /* mp4 효과 레이어 */
+      .effect-layer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        overflow: hidden;
+      }
+
+      .effect-layer video {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.75;
+        mix-blend-mode: screen;
+        filter: brightness(1.3);
+      }
+
+      /* 타이틀 제목 */
+      h1 {
+        position: absolute;
+        top: 6%;
+        left: 50%;
+        transform: translateX(-50%);
+        font-family: 'Nanum Brush Script', cursive;
+        font-size: 8vmin;
+        font-weight: 700;
+        margin: 0;
+        background: linear-gradient(90deg, #e1ee70, #dbdb18, #ffebb3, #f6ffd6);
+        background-size: 300% 300%;
+        -webkit-background-clip: text;
+        color: transparent;
+        animation:
+          fadeIn 2.2s ease-out forwards,
+          shine 6s ease-in-out infinite,
+          glow 4s ease-in-out infinite;
+        pointer-events: none;
+        white-space: nowrap;
+        z-index: 10;
+      }
+
+      /* 인사말 본문 컨테이너 */
+      .greeting-container {
+        position: absolute;
+        top: 25%;             
+        left: 7%;             
+        font-family: 'Nanum Brush Script', cursive;
+        font-size: 5.5vmin;    
+        line-height: 1.3;     
+        color: #FFFDE7;       
+        text-shadow: 2px 2px 4px rgba(10, 50, 10, 0.85),
+                     0px 0px 10px rgba(0, 0, 0, 0.4); 
+        z-index: 11;
+        animation: fadeIn 3s ease-out forwards; 
+      }
+
+      .greeting-p {
+        margin-bottom: 3vmin;  
+      }
+
+      /* 서명(마에스트라) 스타일: 마진을 없애서 아래 플레이어와 밀착 유도 */
+      .signature {
+        margin-bottom: 0.5vmin;
+      }
+
+      @keyframes fadeIn {
+        0% { opacity: 0.35; transform: translateY(5px); }
+        100% { opacity: 1; transform: translateY(0); }
+      }
+
+      @keyframes shine {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+
+      @keyframes glow {
+        0%   { filter: brightness(1) drop-shadow(0 0 6px rgba(255, 235, 100, 0.4)); }
+        50%  { filter: brightness(1.2) drop-shadow(0 0 18px rgba(255, 220, 50, 0.85)); }
+        100% { filter: brightness(1) drop-shadow(0 0 6px rgba(255, 235, 100, 0.4)); }
+      }
+
+      /* 🌟 오디오 플레이어와 마에스트라 간격 조절 */
+      .audio-inline {
+        margin-top: -0.5vmin; /* 마이너스 마진을 주어 위로 바짝 붙였습니다 */
+      }
+
+      .audio-inline audio {
+        border: 2px solid #89bd8c;
+        border-radius: 25px;
+        width: 38vmin;       
+        height: 23px;
+        display: block;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="card-stage">
+      
+      <!-- 타이틀 제목 -->
+      <h1>해피 데이</h1>
+
+      <!-- 인사말 본문 -->
+      <div class="greeting-container">
+        <div class="greeting-p">
+          산수국은 이름 그대로 산에서 자라며 물을 좋아하는 국화 모양의 꽃,<br>
+          한국의 대표적인 자생 수국입니다.
+        </div>
+        <div class="greeting-p">
+          별수국은 꽃잎 끝이 뾰족뾰족하여 마치 밤하늘의 별 모양을 닮았습니다.<br>
+          제주도에서 자생하는 '탐라겹산수국'이 대표적입니다.
+        </div>
+        <div class="greeting-p">
+          장미수국은 꽃잎이 동글동글하고 촘촘하게 겹쳐서 피어,<br>
+          마치 장미꽃(로제트 형태)을 연상시킵니다.
+        </div>
+        
+        <!-- 🌟 마에스트라 부분을 별도 class로 분리하고 <br> 태그를 제거했습니다 -->
+        <div class="signature">
+          마에스트라
+        </div>
+
+        <!-- 오디오 플레이어 -->
+        <div class="audio-inline">
+          <audio id="mainAudio" 
+            src="https://blog.kakaocdn.net/dna/cAcIJU/dJMcabxKVwb/AAAAAAAAAAAAAAAAAAAAAOvhOAsobKXy6cphTyI5RuUu25C4ZnXp11eghNXjXgCu/tfile.mp3?credential=yqXZFxpELC7KVnFOS48ylbz2pIh7yKj8&expires=1782831599&allow_ip=&allow_referer=&signature=7D7ANmvkR%2FSUvrTOf17GKda9%2Bfk%3D"
+            controls autoplay loop>
+          </audio>
+        </div>
+      </div>
+
+      <!-- mp4 효과 레이어 -->
+      <div class="effect-layer">
+        <video src="" autoplay loop muted></video>
+        <video src="https://github.io" autoplay loop muted></video>
+      </div>
+
+    </div>
+
+    <script>
+      const audio = document.getElementById('mainAudio');
+      audio.volume = 0.4;
+
+      document.body.addEventListener('click', () => audio.play(), {
+        once: true,
+      });
+    </script>
+  </body>
+</html>
