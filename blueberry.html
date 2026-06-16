@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Michael Hoppe(마이클 호페) - 'Beloved'</title>
+
+    <!-- Google Fonts Preload + Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Nanum Brush Script -->
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Brush+Script&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background-color: #000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      /* 🌟 걱정 해결: 어떤 모니터/iframe 크기에서도 16:9 비율을 유지하며 안전하게 반응하도록 수정 */
+      .card-stage {
+        position: relative;
+        width: 100vw; /* 뷰포트 너비에 맞춤 */
+        width: 58vw; /* 큰 모니터에서 너무 과하게 커지는 것을 방지 */
+        aspect-ratio: 16 / 9; /* 최신 브라우저 표준 비율 유지 방식 */
+        background: url('https://64.media.tumblr.com/7f45282ecdf67b463dc7def8b29de45c/d573fb697bff388e-4b/s400x600/40f0020000bd06313e8497f28ebc12f138318f82.jpg') no-repeat center center;
+        background-size: cover;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        overflow: hidden;
+      }
+
+      /* mp4 효과 레이어 */
+      .effect-layer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        overflow: hidden;
+      }
+
+      .effect-layer video {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.75;
+        mix-blend-mode: screen;
+        filter: brightness(1.3);
+      }
+
+      /* 타이틀 제목 */
+      h1 {
+        position: absolute;
+        top: 6%;
+        left: 50%;
+        transform: translateX(-50%);
+        font-family: 'Nanum Brush Script', cursive;
+        font-size: 8vmin;
+        font-weight: 700;
+        margin: 0;
+        background: linear-gradient(90deg, #e1ee70, #dbdb18, #ffebb3, #f6ffd6);
+        background-size: 300% 300%;
+        -webkit-background-clip: text;
+        color: transparent;
+        animation:
+          fadeIn 2.2s ease-out forwards,
+          shine 6s ease-in-out infinite,
+          glow 4s ease-in-out infinite;
+        pointer-events: none;
+        white-space: nowrap;
+        z-index: 10;
+      }
+
+      /* 인사말 본문 컨테이너 */
+      .greeting-container {
+        position: absolute;
+        top: 30%;             
+        left: 7%;             
+        font-family: 'Nanum Brush Script', cursive;
+        font-size: 3.5vmin;    
+        line-height: 1.1;     
+        color: #fafcfb;       
+        text-shadow: 2px 2px 4px rgba(10, 50, 10, 0.85),
+                     0px 0px 10px rgba(0, 0, 0, 0.4); 
+        z-index: 11;
+        animation: fadeIn 3s ease-out forwards; 
+      }
+
+      .greeting-p {
+        margin-bottom: 3vmin;  
+      }
+
+      /* 서명(마에스트라) 스타일 */
+      .signature {
+        margin-bottom: 0.5vmin;
+      }
+
+      @keyframes fadeIn {
+        0% { opacity: 0.35; transform: translateY(5px); }
+        100% { opacity: 1; transform: translateY(0); }
+      }
+
+      @keyframes shine {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+
+      @keyframes glow {
+        0%   { filter: brightness(1) drop-shadow(0 0 6px rgba(255, 235, 100, 0.4)); }
+        50%  { filter: brightness(1.2) drop-shadow(0 0 18px rgba(255, 220, 50, 0.85)); }
+        100% { filter: brightness(1) drop-shadow(0 0 6px rgba(255, 235, 100, 0.4)); }
+      }
+
+      /* 오디오 플레이어 간격 조절 */
+      .audio-inline {
+        margin-top: -0.5vmin; 
+      }
+
+      .audio-inline audio {
+        border: 2px solid #89bd8c;
+        border-radius: 25px;
+        width: 38vmin;       
+        height: 23px;
+        display: block;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="card-stage">
+      
+      <!-- 타이틀 제목 -->
+      <h1>블루베리</h1>
+
+      <!-- 인사말 본문 -->
+      <div class="greeting-container">
+        <div class="greeting-p">
+          건조한 바람에도 몸은 쉽게 무너지고<br>
+          기어코 몸살을 품은 감기로 번지고 말았다
+        </div>
+        <div class="greeting-p">
+          조금만 더 자제했더라면 하는 아쉬움<br>
+          부실한 몸을 탓하기엔 이젠 세월이 깊다
+        </div>
+        <div class="greeting-p">
+          바깥 날씨가 너무 좋아 무리하여 쏘다녔드니<br>
+          며칠은 쉬어 가라는 자연의 도리인가 보다
+        </div>
+        
+        <div class="signature">
+          마에스트라
+        </div>
+
+        <!-- 오디오 플레이어 -->
+        <div class="audio-inline">
+          <audio id="mainAudio" 
+            src="https://blog.kakaocdn.net/dn/YeqQH/btrZA1tqPaz/p4gjDqDPkC7OCSsdL4PpK0/tfile.mp3"
+            controls autoplay loop>
+          </audio>
+        </div>
+      </div>
+
+      <!-- mp4 효과 레이어 -->
+      <div class="effect-layer">
+        <video src="" autoplay loop muted></video>
+        <video src="https://github.io" autoplay loop muted></video>
+      </div>
+
+    </div>
+
+    <script>
+      const audio = document.getElementById('mainAudio');
+      audio.volume = 0.4;
+
+      document.body.addEventListener('click', () => audio.play(), {
+        once: true,
+      });
+    </script>
+  </body>
+</html>
