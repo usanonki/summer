@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mila Khodorkovsky - El pescador de perla</title>
+
+    <!-- Google Fonts Preload + Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Nanum Brush Script -->
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Brush+Script&display=swap" rel="stylesheet">
+
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background-color: #000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      /* 원본 이미지의 비율 유지 고정 박스 */
+      .card-stage {
+        position: relative;
+        width: 100vw;
+        height: 58vw; /* 16:9 비율 유지 */
+        max-width: 100%;
+        max-height: 100%;
+        background: url('https://64.media.tumblr.com/487bc3c1547edd6d96fff389640d63ab/d50db6a831ce1910-40/s540x810/61278bdf13332b8d8e5a0c74d364364e7de801d1.jpg') no-repeat center center;
+        background-size: cover;
+      }
+
+      /* mp4 효과 레이어 */
+      .effect-layer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        overflow: hidden;
+      }
+
+      .effect-layer video {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.75;
+        mix-blend-mode: screen;
+        filter: brightness(1.3);
+      }
+
+      /* 타이틀 제목 */
+      h1 {
+        position: absolute;
+        top: 6%;
+        left: 10%;
+        transform: translateX(-50%);
+        font-family: 'Nanum Brush Script', cursive;
+        font-size: 8vmin;
+        font-weight: 700;
+        margin: 0;
+        background: linear-gradient(90deg, #eedc40, #f8f8f7, #ee6b1f, #e60e4f);
+        background-size: 300% 300%;
+        -webkit-background-clip: text;
+        color: transparent;
+        animation:
+          fadeIn 2.2s ease-out forwards,
+          shine 6s ease-in-out infinite,
+          glow 4s ease-in-out infinite;
+        pointer-events: none;
+        white-space: nowrap;
+        z-index: 10;
+      }
+
+      /* 인사말 본문 컨테이너 */
+      .greeting-container {
+        position: absolute;
+        top: 25%;             
+        left: 7%;             
+        font-family: 'Nanum Brush Script', cursive;
+        font-size: 5.5vmin;    
+        line-height: 1.3;     
+        color: #f3a64e;       
+        text-shadow: 2px 2px 4px rgba(10, 50, 10, 0.85),
+                     0px 0px 10px rgba(0, 0, 0, 0.4); 
+        z-index: 11;
+        animation: fadeIn 3s ease-out forwards; 
+      }
+
+      .greeting-p {
+        margin-bottom: 3vmin;  
+      }
+
+      /* 서명(마에스트라) 스타일: 마진을 없애서 아래 플레이어와 밀착 유도 */
+      .signature {
+        margin-bottom: 0.5vmin;
+        /* 추가할 스타일 */
+        color: #d4b010;          /* 원하는 색상으로 변경 */
+        font-size: 4.5vmin;      /* greeting-container(5.5vmin)보다 작게 */
+        line-height: 1.1;        /* 기본값(1.3)보다 줄여서 줄 간격 좁힘 */
+      }
+
+      @keyframes fadeIn {
+        0% { opacity: 0.35; transform: translateY(5px); }
+        100% { opacity: 1; transform: translateY(0); }
+      }
+
+      @keyframes shine {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+
+      @keyframes glow {
+        0%   { filter: brightness(1) drop-shadow(0 0 6px rgba(255, 235, 100, 0.4)); }
+        50%  { filter: brightness(1.2) drop-shadow(0 0 18px rgba(255, 220, 50, 0.85)); }
+        100% { filter: brightness(1) drop-shadow(0 0 6px rgba(255, 235, 100, 0.4)); }
+      }
+
+      /* 🌟 오디오 플레이어와 마에스트라 간격 조절 */
+      .audio-inline {
+        margin-top: -0.5vmin; /* 마이너스 마진을 주어 위로 바짝 붙였습니다 */
+      }
+
+      .audio-inline audio {
+        border: 2px solid #d4d09b;
+        border-radius: 25px;
+        width: 38vmin;       
+        height: 20px;
+        display: block;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="card-stage">
+      
+      <!-- 타이틀 제목 -->
+      <h1>능소화</h1>
+
+      <!-- 인사말 본문 -->
+      <div class="greeting-container">
+        <div class="greeting-p">
+          연주자 Mila Khodorkovsky (밀라 호도르코프스키)는<br>
+          러시아 출신의 여성 바이올린 팝 아티스트이며
+        </div>
+        <div class="greeting-p">
+          원곡은 오페라 진주 조개 잡이 (Les Pêcheurs de Perles)의 아리아<br>
+           'Je crois entendre encore' (나는 아직도 들리는 것 같아)이다
+        </div>
+        <div class="greeting-p">
+          조르주 비제 (Bizet, Georges, 1838년 ~ 1875년)의 <br>
+          오페라 작곡가로서의 최초의 중요한 작품입니다<br>
+        </div>
+        
+        <!-- 🌟 마에스트라 부분을 별도 class로 분리하고 <br> 태그를 제거했습니다 -->
+        <div class="signature">
+          Mila Khodorkovsky - El pescador de perla<br>
+          마에스트라
+        </div>
+
+        <!-- 오디오 플레이어 -->
+        <div class="audio-inline">
+          <audio id="mainAudio" 
+            src="https://blog.kakaocdn.net/dn/rSI5q/btsJ7NhlzFM/pHPys4A1eDm838BgErNS0K/tfile.mp3"
+            controls autoplay loop>
+          </audio>
+        </div>
+      </div>
+
+      <!-- mp4 효과 레이어 -->
+      <div class="effect-layer">
+        <video src="" autoplay loop muted></video>
+        <video src="https://github.io" autoplay loop muted></video>
+      </div>
+
+    </div>
+
+    <script>
+      const audio = document.getElementById('mainAudio');
+      audio.volume = 0.4;
+
+      document.body.addEventListener('click', () => audio.play(), {
+        once: true,
+      });
+    </script>
+  </body>
+</html>
