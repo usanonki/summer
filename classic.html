@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <title>classical</title>
+
+    <style>
+      /* 전체 화면 기본 설정 */
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        height: 100%;
+      }
+
+      /* sky.gif 전체 배경 */
+      body {
+        background: url('https://usanonki.github.io/photo/0625.jpg')
+          no-repeat center center fixed;
+        background-size: cover;
+
+        /* 투명한 mp4 효과 레이어 */
+        .effect-layer {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          pointer-events: none; /* 클릭 방해 X */
+          overflow: hidden;
+        }
+
+        .effect-layer video {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          opacity: 0.75; /* 투명도 조절 */
+          mix-blend-mode: screen; /* 검정 배경 제거 */
+          filter: brightness(1.3); /* 밝기 보정 */
+          pointer-events: none;
+        }
+      }
+      /* 오디오 플레이어 우측 하단 고정 */
+      .audio-fixed {
+        position: fixed;
+        right: 30px;
+        bottom: 30px;
+        z-index: 9999;
+      }
+
+      .audio-fixed audio {
+        border: 2.5px solid #6c96f0;
+        border-radius: 40px;
+        width: 220px;
+        height: 20px;
+      }
+
+      /* ✨ 그라데이션 + 반짝임 + 페이드인 */
+      h1 {
+        position: fixed;
+        top: 10px; /* 너가 조정한 값 */
+        left: 13%; /* 너가 조정한 값 */
+        transform: translateX(-50%);
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.5rem; /* 너가 조정한 값 */
+        font-weight: 700;
+
+        /* 그라데이션 텍스트 */
+        background: linear-gradient(90deg, #e1ee70, #ffe6ff, #b3e5ff, #ffd6f5);
+        background-size: 300% 300%;
+        -webkit-background-clip: text;
+        color: transparent;
+
+        /* 애니메이션 3종 */
+        animation:
+          fadeIn 2.2s ease-out forwards,
+          shine 6s ease-in-out infinite,
+          glow 4s ease-in-out infinite;
+
+        pointer-events: none;
+        white-space: nowrap;
+        z-index: 10;
+      }
+
+      /* ✨ 아이콘 흔들림 */
+      h1 .icon {
+        display: inline-block;
+        animation: swing 2.5s ease-in-out infinite;
+      }
+
+      /* ✨ 부드러운 페이드인 */
+      @keyframes fadeIn {
+        0% {
+          opacity: 0;
+          transform: translate(-50%, -10px);
+        }
+        100% {
+          opacity: 1;
+          transform: translate(-50%, 0);
+        }
+      }
+
+      /* 🌈 그라데이션 흐르는 반짝임 */
+      @keyframes shine {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      /* 💫 은은한 빛 번짐 */
+      @keyframes glow {
+        0% {
+          text-shadow: 0 0 10px rgba(255, 200, 255, 0.4);
+        }
+        50% {
+          text-shadow: 0 0 25px rgba(255, 150, 255, 0.8);
+        }
+        100% {
+          text-shadow: 0 0 10px rgba(255, 200, 255, 0.4);
+        }
+      }
+
+      /* 🌸 아이콘 살짝 흔들리는 애니메이션 */
+      @keyframes swing {
+        0% {
+          transform: rotate(0deg);
+        }
+        25% {
+          transform: rotate(8deg);
+        }
+        50% {
+          transform: rotate(0deg);
+        }
+        75% {
+          transform: rotate(-8deg);
+        }
+        100% {
+          transform: rotate(0deg);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>
+      <span class="icon">🌌</span>
+      Happy Day
+      <span class="icon">🌌</span>
+    </h1>
+    <!-- 꽃잎/물방울 효과 영상 레이어 -->
+    <div class="effect-layer">
+      <video
+        src="https://usanonki.github.io/photo/0625.mp4"
+        autoplay
+        loop
+        muted
+      ></video>
+      <video
+        src="https://usanonki.github.io/photo/0625-1.mp4"
+        .mp4"
+        autoplay
+        loop
+        muted
+      ></video>
+    </div>
+
+    <!-- 오디오 플레이어 -->
+    <div class="audio-fixed">
+      <audio
+        src="https://usanonki.github.io/music/classic.mp3"
+        controls
+        autoplay
+        loop
+      >
+      </audio>
+    </div>
+  </body>
+</html>
