@@ -1,174 +1,242 @@
 <!doctype html>
 <html lang="ko">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Bilitis - Francis Lai</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bilitis - Francis Lai</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nanum+Brush+Script&display=swap" rel="stylesheet">
+    <!-- Google Fonts Preload + Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<style>
-  html, body {
-    margin: 0; padding: 0;
-    width: 100%; height: 100%;
-    overflow: hidden;
-    background-color: #000;
-    display: flex; justify-content: center; align-items: center;
-  }
+    <!-- Nanum Brush Script -->
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Brush+Script&display=swap" rel="stylesheet">
 
-  .card-stage {
-    position: relative;
-    width: 100vw;
-    height: 58vw;
-    background: url('https://64.media.tumblr.com/b2d3740050f0e294928207613dfbf287/b1edbfa85febfad1-fe/s540x810/414a52c8d60e6a446d085a589f99fd35f0a5b047.jpg') no-repeat center center;
-    background-size: cover;
-  }
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background-color: #000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
 
-  h1 {
-    position: absolute;
-    top: 6%; left: 10%;
-    transform: translateX(-50%);
-    font-family: 'Nanum Brush Script', cursive;
-    font-size: 8vmin;
-    font-weight: 700;
-    margin: 0;
-    background: linear-gradient(90deg, #eedc40, #f8f8f7, #ee6b1f, #e60e4f);
-    background-size: 300% 300%;
-    -webkit-background-clip: text;
-    color: transparent;
-    animation: fadeIn 2.2s ease-out forwards, shine 6s ease-in-out infinite, glow 4s ease-in-out infinite;
-    pointer-events: none;
-    white-space: nowrap;
-    z-index: 10;
-  }
+      /* 원본 이미지의 비율 유지 고정 박스 */
+      .card-stage {
+        position: relative;
+        width: 100vw;
+        height: 58vw; /* 16:9 비율 유지 */
+        max-width: 100%;
+        max-height: 100%;
+        background: url('https://64.media.tumblr.com/b2d3740050f0e294928207613dfbf287/b1edbfa85febfad1-fe/s540x810/414a52c8d60e6a446d085a589f99fd35f0a5b047.jpg') no-repeat center center;
+        background-size: cover;
+      }
 
-  .greeting-container {
-    position: absolute;
-    top: 25%; left: 7%;
-    font-family: 'Nanum Brush Script', cursive;
-    font-size: 5.5vmin;
-    line-height: 1.3;
-    color: #e4ce0b;
-    text-shadow: 2px 2px 4px rgba(10, 50, 10, 0.85),
-                 0px 0px 10px rgba(0, 0, 0, 0.4);
-    z-index: 11;
-  }
+      /* mp4 효과 레이어 */
+      .effect-layer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        overflow: hidden;
+      }
 
-  .text-block {
-    opacity: 0;
-    transition: opacity 2.5s ease-in-out;
-  }
+      .effect-layer video {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.75;
+        mix-blend-mode: screen;
+        filter: brightness(1.3);
+      }
 
-  .text-block.show {
-    opacity: 1;
-  }
+      /* 타이틀 제목 */
+      h1 {
+        position: absolute;
+        top: 6%;
+        left: 10%;
+        transform: translateX(-50%);
+        font-family: 'Nanum Brush Script', cursive;
+        font-size: 8vmin;
+        font-weight: 700;
+        margin: 0;
+        background: linear-gradient(90deg, #eedc40, #f8f8f7, #ee6b1f, #e60e4f);
+        background-size: 300% 300%;
+        -webkit-background-clip: text;
+        color: transparent;
+        animation:
+          fadeInTitle 2.2s ease-out forwards,
+          shine 6s ease-in-out infinite,
+          glow 4s ease-in-out infinite;
+        pointer-events: none;
+        white-space: nowrap;
+        z-index: 10;
+      }
 
-  .signature {
-    margin-top: 2vmin;
-    color: #d4b010;
-    font-size: 4.5vmin;
-    line-height: 1.1;
-  }
+      /* 해석 본문 컨테이너 */
+      .greeting-container {
+        position: absolute;
+        top: 25%;             
+        left: 7%;             
+        font-family: 'Nanum Brush Script', cursive;
+        font-size: 5.5vmin;    
+        line-height: 1.4;     
+        color: #e4ce0b;       
+        text-shadow: 2px 2px 4px rgba(10, 50, 10, 0.85),
+                     0px 0px 10px rgba(0, 0, 0, 0.4); 
+        z-index: 11;
+        width: 85%;
+      }
 
-  .audio-inline audio {
-    border: 2px solid #d4d09b;
-    border-radius: 25px;
-    width: 38vmin;
-    height: 20px;
-    display: block;
-    margin-top: 1vmin;
-  }
+      /* 20초 간격 롤링을 위한 클래스 */
+      .greeting-p {
+        display: none; /* 기본적으로는 숨김 */
+        margin-bottom: 3vmin;  
+      }
 
-  @keyframes fadeIn {
-    0% { opacity: 0.35; transform: translateY(5px); }
-    100% { opacity: 1; transform: translateY(0); }
-  }
-</style>
-</head>
+      .greeting-p.active {
+        display: block;
+        animation: textFade 18s ease-in-out forwards;
+      }
 
-<body>
-<div class="card-stage">
+      /* 🌟 하단 고정 영역 컨테이너 추가 */
+      .bottom-fixed-area {
+        position: absolute;
+        bottom: 5%;           /* 화면 하단에서 5% 띄움 */
+        left: 7%;             /* 본문 좌측 정렬 라인에 맞춤 */
+        z-index: 12;
+      }
 
-  <h1>Bilitis - Francis Lai</h1>
+      /* 서명(마에스트라) 스타일 */
+      .signature {
+        margin-bottom: 1vmin;
+        color: #d4b010;          
+        font-family: 'Nanum Brush Script', cursive;
+        font-size: 4.5vmin;      
+        line-height: 1.2;
+        text-shadow: 2px 2px 4px rgba(10, 50, 10, 0.85);
+      }
 
-  <div class="greeting-container">
+      /* 오디오 플레이어 스타일 */
+      .audio-inline {
+        margin-top: 0; 
+      }
 
-    <!-- 3단 감성 텍스트 -->
-    <div id="t1" class="text-block">
-      흐릿한 빛 속에서 시작되는 이야기.<br>
-      부드러운 플루트와 얇은 스트링이 스며들 듯 번지며,<br>
-      아직 말해지지 않은 감정만이 천천히 떠오릅니다.
+      .audio-inline audio {
+        border: 2px solid #d4d09b;
+        border-radius: 25px;
+        width: 38vmin;       
+        height: 20px;
+        display: block;
+      }
+
+      @keyframes fadeInTitle {
+        0% { opacity: 0.35; transform: translateY(5px); }
+        100% { opacity: 1; transform: translateY(0); }
+      }
+
+      /* 부드럽게 나타났다가 사라지는 애니메이션 */
+      @keyframes textFade {
+        0% { opacity: 0; transform: translateY(10px); }
+        8% { opacity: 1; transform: translateY(0); }
+        92% { opacity: 1; transform: translateY(0); }
+        100% { opacity: 0; transform: translateY(-5px); }
+      }
+
+      @keyframes shine {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+
+      @keyframes glow {
+        0%   { filter: brightness(1) drop-shadow(0 0 6px rgba(255, 235, 100, 0.4)); }
+        50%  { filter: brightness(1.2) drop-shadow(0 0 18px rgba(255, 220, 50, 0.85)); }
+        100% { filter: brightness(1) drop-shadow(0 0 6px rgba(255, 235, 100, 0.4)); }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="card-stage">
+      
+      <!-- 타이틀 제목 -->
+      <h1>Bilitis - Francis Lai</h1>
+
+      <!-- 해석 및 본문 -->
+      <div class="greeting-container">
+        
+        <!-- 1단계 텍스트 -->
+        <div class="greeting-p active">
+          흐릿한 빛 속에서 깨어나는 이야기.<br>
+          낮게 읊조리는 부드러운 플루트와 아스라이 번지는 스트링이<br>
+          스며들 듯 얽히며, 아직 채 피어나지 않은 순수한 감정의 시작을 알립니다.
+        </div>
+        
+        <!-- 2단계 텍스트 -->
+        <div class="greeting-p">
+          청춘의 결이 찬란하게 흔들리는 순간.<br>
+          소녀의 순수함과 여인의 성숙함, 그 애틋한 경계를 따라 흐르는 선율은<br>
+          마음속 깊은 떨림과 감각적인 매혹을 조용히 건드립니다.
+        </div>
+        
+        <!-- 3단계 텍스트 -->
+        <div class="greeting-p">
+          바람처럼 스쳐 지나간 계절의 기억.<br>
+          눈부신 빛이 바래고 뜨거웠던 감정이 지나간 자리에는,<br>
+          붙잡을 수 없는 청춘에 대한 아련한 여운과 향수만이 부드럽게 맴돕니다.
+        </div>
+      </div>
+
+      <!-- 🌟 화면 하단에 고정된 서명 및 오디오 영역 -->
+      <div class="bottom-fixed-area">
+        <!-- 고정 서명 영역 -->
+        <div class="signature">
+          영화 &lt;빌리티스(Bilitis)&gt;<br>
+          마에스트라
+        </div>
+
+        <!-- 오디오 플레이어 -->
+        <div class="audio-inline">
+          <audio id="mainAudio" 
+            src="https://blog.kakaocdn.net/dn/HIlj1/btrzuzgtAa7/m1mKkmh6Az1RuR9deHqLf0/tfile.mp3"
+            controls autoplay loop>
+          </audio>
+        </div>
+      </div>
+
+      <!-- mp4 효과 레이어 -->
+      <div class="effect-layer">
+        <video src="" autoplay loop muted></video>
+        <video src="https://github.io" autoplay loop muted></video>
+      </div>
+
     </div>
 
-    <div id="t2" class="text-block">
-      청춘의 결이 흔들리는 순간.<br>
-      순수함과 성숙 사이의 얇은 경계를 따라 흐르는 선율,<br>
-      마음속 깊은 떨림을 조용히 건드립니다.
-    </div>
+    <script>
+      const audio = document.getElementById('mainAudio');
+      audio.volume = 0.4;
 
-    <div id="t3" class="text-block">
-      바람처럼 스쳐 지나가는 기억.<br>
-      빛이 스치고 감정이 지나가고,<br>
-      여운만이 부드럽게 남습니다.
-    </div>
+      document.body.addEventListener('click', () => audio.play(), {
+        once: true,
+      });
 
-    <div class="signature">
-      Maestra 
-    </div>
+      // 20초마다 텍스트를 전환하는 로직
+      const textBlocks = document.querySelectorAll('.greeting-p');
+      let currentIndex = 0;
 
-    <!-- 오디오 플레이어 (정상 작동 버전) -->
-    <div class="audio-inline">
-      <audio id="mainAudio"
-        src="https://blog.kakaocdn.net/dn/HIlj1/btrzuzgtAa7/m1mKkmh6Az1RuR9deHqLf0/tfile.mp3"
-        controls autoplay loop>
-      </audio>
-    </div>
-
-  </div>
-
-</div>
-
-<script>
-const audio = document.getElementById('mainAudio');
-audio.volume = 0.45;
-
-// 텍스트 DOM
-const t1 = document.getElementById('t1');
-const t2 = document.getElementById('t2');
-const t3 = document.getElementById('t3');
-
-// 음악 길이에 맞춘 타이밍 (원하면 조정 가능)
-const timing1 = 0;      // 0초 ~
-const timing2 = 14;     // 14초 ~
-const timing3 = 32;     // 32초 ~
-
-function updateText() {
-  const ct = audio.currentTime;
-
-  if (ct >= timing1 && ct < timing2) {
-    t1.classList.add('show');
-    t2.classList.remove('show');
-    t3.classList.remove('show');
-  }
-  else if (ct >= timing2 && ct < timing3) {
-    t1.classList.remove('show');
-    t2.classList.add('show');
-    t3.classList.remove('show');
-  }
-  else if (ct >= timing3) {
-    t1.classList.remove('show');
-    t2.classList.remove('show');
-    t3.classList.add('show');
-  }
-}
-
-setInterval(updateText, 500);
-
-// 모바일 자동재생 대응
-document.body.addEventListener('click', () => audio.play(), { once: true });
-</script>
-
-</body>
+      setInterval(() => {
+        textBlocks[currentIndex].classList.remove('active');
+        currentIndex = (currentIndex + 1) % textBlocks.length;
+        textBlocks[currentIndex].classList.add('active');
+      }, 20000);
+    </script>
+  </body>
 </html>
