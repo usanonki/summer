@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Yaroslav Nikitin-RAIN WALTZ
+RAIN WALTZ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap');
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Playfair Display', serif;
+        /* 1. 배경 설정: url만 바꾸면 분위기가 확 바뀝니다 */
+        background:
+          linear-gradient(
+            90deg,
+            rgba(88, 130, 29, 0.1),
+            rgba(55, 95, 1, 0.1) 29%,
+            transparent,
+            transparent
+          ),
+          linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
+          url('https://usanonki.github.io/photo/0705.gif')
+            center/cover no-repeat;
+        background-attachment: fixed;
+        background-color: #dbb9a7;
+        color: #f0e6d2;
+        height: 100vh;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+
+      /* ================================================
+   수정된 CSS - iframe(ql-video) 환경 최적화
+   오디오 바가 항상 footer 위에 위치하도록 수정
+   ================================================ */
+
+      /* 
+  핵심 변경사항:
+  - body/wrapper를 flexbox column으로 설정
+  - .audio-container의 position: absolute 제거 → 일반 흐름으로
+  - bottom: 70px 제거 → flex 순서(order)로 위치 결정
+  - iframe 1/12 축소 시에도 레이아웃 깨지지 않음
+*/
+
+      /* 1. 최상위 컨테이너: 반드시 flex column으로 */
+      body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh; /* 전체 높이 사용 */
+        margin: 0;
+        padding: 0;
+      }
+
+      /* 또는 wrapper div가 있다면 body 대신 이걸 사용 */
+      /* .wrapper 또는 .page 등 실제 최상위 div에 적용 */
+      .container {
+        width: 90%;
+        max-width: 850px;
+        text-align: center;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        flex: 1; /* 남은 공간 차지 */
+      }
+
+      h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: clamp(1.1rem, 3vw, 2.1rem);
+        margin-bottom: 5px;
+        text-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+      }
+
+      .subtitle {
+        font-size: clamp(0.7rem, 2vw, 1.3rem);
+        margin-bottom: 50px;
+        opacity: 0.9;
+        letter-spacing: 2px;
+      }
+
+      /* 2. 오디오 컨트롤: ★ 핵심 수정 부분 ★
+   - position: absolute / bottom: 70px 제거
+   - 일반 흐름(static/relative)으로 변경
+   - margin-top: auto 로 아래쪽으로 밀어냄
+   - footer 바로 위에 오게 됨
+*/
+      .audio-container {
+        position: relative; /* ← absolute에서 변경 */
+        left: auto; /* ← 제거 */
+        bottom: auto; /* ← bottom: 70px 제거 */
+        transform: none; /* ← translateX(-50%) 제거 */
+
+        display: flex;
+        justify-content: center;
+
+        margin-top: auto; /* ← 핵심: 위쪽 공간을 자동으로 밀어냄 */
+        margin-bottom: 10px; /* footer와의 간격 */
+
+        z-index: 10;
+        opacity: 0.6;
+        transition: opacity 0.3s;
+      }
+
+      .audio-container:hover {
+        opacity: 1;
+      }
+
+      audio {
+        width: 240px;
+        height: 20px;
+      }
+
+      /* 3. 텍스트 박스: 정보 전달용 레이아웃 */
+      .text-wrapper {
+        position: relative;
+        min-height: 180px;
+        flex: 1; /* 가능한 공간 차지 */
+      }
+
+      .text-box {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        font-size: clamp(0.8rem, 1.8vw, 1.5rem);
+        line-height: 1.9;
+        padding: 30px;
+        background: rgba(0, 0, 0, 0.25);
+        backdrop-filter: blur(3px);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 1.5s ease;
+        display: none;
+      }
+
+      .text-box.active {
+        display: block;
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* 4. footer: 항상 맨 아래 */
+      .footer {
+        margin-top: 0; /* audio-container의 margin-bottom으로 간격 조정 */
+        padding-bottom: 15px;
+        font-size: 0.95rem;
+        opacity: 0.7;
+        text-align: center;
+      }
+
+      .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(
+          circle,
+          transparent 40%,
+          rgba(0, 0, 0, 0.3) 100%
+        );
+        pointer-events: none;
+        z-index: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="overlay"></div>
+
+    <div class="container">
+      <!-- 4. 내용 수정 영역 -->
+      <h1>Yaroslav Nikitin</h1>
+      <p class="subtitle">RAIN WALTZ</p>
+
+      <div class="text-wrapper">
+        <div id="text1" class="text-box active">
+          <p>
+            비가 내리는 창가에 고요한 숨이 내려앉고,<br />
+            흩어지는 물빛 사이로 오래된 생각이 피어오릅니다.
+          </p>
+        </div>
+
+        <div id="text2" class="text-box">
+          <p>
+            부드러운 박동 위로 작은 기억들이 춤을 추고,<br />
+            흘러가는 음표마다 잊고 있던 감정이 깨어납니다.
+          </p>
+        </div>
+
+        <div id="text3" class="text-box">
+          <p>
+            어둑한 공기 속에서도 한 줄기 밝은 숨이 스며들고,<br />
+            비가 그치듯 마음도 천천히 맑아집니다.
+          </p>
+        </div>
+
+        <div id="text4" class="text-box">
+          <p>
+            남아 있는 것은 조용한 따뜻함뿐이며,<br />
+            왈츠의 선율이 연휴의 마지막 날을 부드럽게 감싸줍니다.
+          </p>
+        </div>
+      </div>
+
+      <!-- 오디오 소스 변경 -->
+      <div class="audio-container">
+        <audio
+          id="mainAudio"
+          style="
+            border: 2.5px solid #367e28;
+            border-radius: 25px;
+            width: 220px;
+            height: 20px;
+          "
+          src="https://blog.kakaocdn.net/dn/cnyPdr/btsFoGgPKaE/2u3AjPNTZECJoLS2CGrWF1/tfile.mp3"
+          controls
+          autoplay
+          loop
+        ></audio>
+      </div>
+
+      <div class="footer">
+        Happy Day<br />
+        <small>© Maestra</small>
+      </div>
+    </div>
+
+    <script>
+      const boxes = [
+        document.getElementById('text1'),
+        document.getElementById('text2'),
+        document.getElementById('text3'),
+        document.getElementById('text4'),
+      ];
+
+      let currentIndex = 0;
+
+      // 초기 설정
+      function init() {
+        boxes.forEach((box) => {
+          box.style.display = 'none'; // 모두 숨김
+          box.classList.remove('active'); // active 클래스도 제거
+        });
+
+        // 첫 번째 박스 표시
+        boxes[0].style.display = 'block';
+        setTimeout(() => {
+          boxes[0].classList.add('active');
+        }, 50);
+      }
+
+      function showNextText() {
+        boxes[currentIndex].classList.remove('active');
+
+        currentIndex = (currentIndex + 1) % boxes.length;
+
+        setTimeout(() => {
+          boxes.forEach((box) => (box.style.display = 'none'));
+          boxes[currentIndex].style.display = 'block';
+
+          setTimeout(() => {
+            boxes[currentIndex].classList.add('active');
+          }, 50);
+        }, 1500);
+      }
+
+      // 페이지 로드 완료 후 초기화
+      window.addEventListener('load', init);
+
+      // 15초마다 자동 전환
+      setInterval(showNextText, 15000);
+    </script>
+  </body>
+</html>
