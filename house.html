@@ -13,9 +13,9 @@
         box-sizing: border-box;
       }
 
-      /* 1. 배경 이미지 및 중앙 정렬 설정 */
+      /* 1. 배경 이미지 및 정렬 설정 */
       body {
-        background-image: url('https://usanonki.github.io/photo/house.jpg'); /* 배경 이미지 */
+        background-image: url('https://usanonki.github.io/photo/house.jpg');
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
@@ -23,30 +23,33 @@
         min-height: 100vh;
         overflow: hidden;
         background-color: #000;
-        
-        /* 영상과 오디오를 화면 중앙에 배치하기 위한 Flexbox 설정 */
+
         display: flex;
-        justify-content: center;
-        align-items: center;
+        justify-content: flex-start;
+        align-items: flex-end;
+        padding-left: 1%;
+        padding-bottom: 1%;
+
+        cursor: pointer; /* 클릭 가능한 화면임을 은근히 암시 */
       }
 
-      /* 2. 미디어(영상 + 오디오) 그룹 컨테이너 */
+      /* 2. 미디어(영상) 그룹 컨테이너 */
       .media-center {
         display: flex;
-        flex-direction: column; /* 세로로 배치 */
+        flex-direction: column;
         align-items: center;
-        gap: 10px; /* 영상과 오디오 사이의 간격 */
         z-index: 10;
       }
 
       /* 3. 영상 컨테이너 스타일 */
       .video-container {
-        width: 400px; /* 보기 좋게 크기를 약간 키웠습니다 (원하는 크기로 수정 가능) */
-        aspect-ratio: 16 / 9; /* 16:9 비율 유지 */
+        position: relative; /* 오디오를 이 안에서 절대 위치로 배치하기 위한 기준점 */
+        width: 400px;
+        aspect-ratio: 16 / 9;
         border-radius: 12px;
         border: 2px solid rgba(255, 255, 255, 0.5);
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        overflow: hidden;
+        overflow: hidden; /* 오디오가 영상 밖으로 튀어나가지 않도록 잘라줌 */
       }
 
       .video-container video {
@@ -56,16 +59,12 @@
         display: block;
       }
 
-      /* 4. 오디오 플레이어 스타일 */
-      .audio-container audio {
-        border: 2.5px solid #4b4e47;
-        border-radius: 40px;
-        width: 250px;
-        height: 25px; /* 컨트롤이 잘 보이도록 기존 25px에서 35px로 약간 늘렸습니다 */
-        outline: none;
+      /* 4. 오디오 플레이어: 영상 하단에 겹쳐지되, 화면엔 보이지 않음 */
+      .audio-container {
+        display: none; /* 플레이어 UI 완전히 숨김 */
       }
 
-      /* 5. 우측 하단 텍스트 (기존 유지) */
+      /* 5. 우측 하단 텍스트 */
       .overlay-text {
         position: fixed;
         right: 5%;
@@ -85,11 +84,9 @@
   </head>
 
   <body>
-    
-    <!-- 화면 중앙에 배치될 영상 및 오디오 그룹 -->
+
+    <!-- 화면 좌측 하단에 배치될 영상 + (숨겨진) 오디오 -->
     <div class="media-center">
-      
-      <!-- 영상 영역 -->
       <div class="video-container">
         <video autoplay muted loop playsinline>
           <source
@@ -97,26 +94,37 @@
             type="video/mp4"
           />
         </video>
-      </div>
 
-      <!-- 오디오 플레이어 -->
-      <div class="audio-container">
-        <audio
-          src="https://64.media.tumblr.com/3682ef729a296cebc3c0404ae5508bb3/27b93379e00f6b26-5b/dc9a6ce5b5ccb278cbecaa815d5313d69305b8e7.mp3"
-          controls
-          autoplay
-          loop
-        >
-          
-        </audio>
+        <!-- 오디오는 영상 안에 위치하지만 화면엔 보이지 않음 -->
+        <div class="audio-container">
+          <audio
+            id="bgm"
+            src="https://64.media.tumblr.com/3682ef729a296cebc3c0404ae5508bb3/27b93379e00f6b26-5b/dc9a6ce5b5ccb278cbecaa815d5313d69305b8e7.mp3"
+            loop
+          ></audio>
+        </div>
       </div>
-      
     </div>
 
     <!-- 우측 하단 텍스트 -->
     <div class="overlay-text">
       <p id="status-text"></p>
     </div>
+
+    <script>
+      // 화면을 처음 클릭하는 순간 배경음악 재생 시작
+      document.body.addEventListener(
+        'click',
+        function startAudio() {
+          const audio = document.getElementById('bgm');
+          audio.play().catch((err) => {
+            console.log('재생 실패:', err);
+          });
+          document.body.removeEventListener('click', startAudio);
+        },
+        { once: true }
+      );
+    </script>
 
   </body>
 </html>
