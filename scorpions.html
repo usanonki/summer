@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <title>Scorpions - Still Loving You</title>
+
+    <style>
+      /* 전체 화면 기본 설정 */
+      html, body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        height: 100%;
+      }
+
+      /* 배경 설정 */
+      body {
+        background: url('https://usanonki.github.io/photo/still.jpg') no-repeat center center fixed;
+        background-size: cover;
+      }
+
+      /* 투명한 mp4 효과 레이어 (body에서 분리) */
+      .effect-layer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none; /* 클릭 방해 X */
+        overflow: hidden;
+      }
+
+      .effect-layer video {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.75; /* 투명도 조절 */
+        mix-blend-mode: screen; /* 검정 배경 제거 */
+        filter: brightness(1.3); /* 밝기 보정 */
+        pointer-events: none;
+      }
+
+      /* 우측 하단 고정 컨테이너 */
+      .audio-fixed {
+        position: fixed;
+        right: 40px;
+        bottom: 40px;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end; /* 오른쪽 정렬 */
+      }
+
+      /* ✨ 곡 정보 박스 스타일 */
+      .track-info {
+        background: rgba(0, 0, 0, 0.25); /* 반투명 검은색 배경으로 가독성 확보 */
+        color: #fff;
+        padding: 15px 20px;
+        border-radius: 15px;
+        margin-bottom: 12px; /* 오디오와의 간격 */
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.55rem;
+        line-height: 1.6;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      }
+
+      .track-info p {
+        margin: 0;
+      }
+
+      .track-info strong {
+        color: #b3e5ff; /* 강조색 */
+      }
+
+      /* 오디오 플레이어 스타일 */
+      .audio-fixed audio {
+        border: 2.5px solid #6c96f0;
+        border-radius: 40px;
+        width: 200px; /* 길이를 살짝 늘려 안정감 부여 */
+        height: 15px; /* 높이를 살짝 키움 */
+        background-color: rgba(255, 255, 255, 0.8); /* 플레이어 기본 배경 */
+      }
+
+      /* ✨ 그라데이션 + 반짝임 + 페이드인 */
+      h1 {
+        position: fixed;
+        top: 10px; 
+        left: 13%; 
+        transform: translateX(-50%);
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.5rem; 
+        font-weight: 700;
+
+        /* 그라데이션 텍스트 */
+        background: linear-gradient(90deg, #e1ee70, #ffe6ff, #b3e5ff, #ffd6f5);
+        background-size: 300% 300%;
+        -webkit-background-clip: text;
+        color: transparent;
+
+        /* 애니메이션 3종 */
+        animation:
+          fadeIn 2.2s ease-out forwards,
+          shine 6s ease-in-out infinite,
+          glow 4s ease-in-out infinite;
+
+        pointer-events: none;
+        white-space: nowrap;
+        z-index: 10;
+      }
+
+      /* ✨ 아이콘 흔들림 */
+      h1 .icon {
+        display: inline-block;
+        animation: swing 2.5s ease-in-out infinite;
+      }
+
+      /* ✨ 부드러운 페이드인 */
+      @keyframes fadeIn {
+        0% { opacity: 0; transform: translate(-50%, -10px); }
+        100% { opacity: 1; transform: translate(-50%, 0); }
+      }
+
+      /* 🌈 그라데이션 흐르는 반짝임 */
+      @keyframes shine {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+
+      /* 💫 은은한 빛 번짐 */
+      @keyframes glow {
+        0% { text-shadow: 0 0 10px rgba(255, 200, 255, 0.4); }
+        50% { text-shadow: 0 0 25px rgba(255, 150, 255, 0.8); }
+        100% { text-shadow: 0 0 10px rgba(255, 200, 255, 0.4); }
+      }
+
+      /* 🌸 아이콘 살짝 흔들리는 애니메이션 */
+      @keyframes swing {
+        0% { transform: rotate(0deg); }
+        25% { transform: rotate(8deg); }
+        50% { transform: rotate(0deg); }
+        75% { transform: rotate(-8deg); }
+        100% { transform: rotate(0deg); }
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1> Happy Day</h1>            
+    
+    <div class="effect-layer">
+      <video src="https://usanonki.github.io/photo/0625.mp4" autoplay loop muted></video>
+      <video src="https://usanonki.github.io/photo/0625-1.mp4" autoplay loop muted></video>
+    </div>
+
+    <!-- 오디오 플레이어 & 곡 정보 -->
+    <div class="audio-fixed">
+      <!-- 새로 추가된 곡 정보 박스 -->
+      <div class="track-info">
+        <p><strong>아티스트:</strong> Scorpions (스콜피온스)</p>
+        <p><strong>앨범:</strong> Love at First Sting</p>
+        <p><strong>발매일:</strong> 1984년</p>
+        <p><strong>장르:</strong> Power Ballad, Hard Rock</p>
+        <p><strong>작사/작곡:</strong> Rudolf Schenker, Klaus Meine</p>
+      </div>
+
+      <audio src="https://usanonki.github.io/music/still.mp3" controls autoplay loop></audio>
+    </div>
+  </body>
+</html>
