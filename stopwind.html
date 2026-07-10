@@ -16,7 +16,7 @@
     height: 100%;
     background: #ffffff;
     overflow: hidden;
-    font-family: 'Georgia', serif;
+    font-family: 'Malgun Gothic', '맑은 고딕', 'Apple SD Gothic Neo', 'Dotum', '돋움', sans-serif;
   }
 
   /* 전체를 세로로 쌓는 컨테이너: gif -> 텍스트 -> 오디오 순서로 분리 배치 */
@@ -42,11 +42,11 @@
   }
 
   .text {
-    color: #fff;
+    color: #0e0d0d;
     font-size: 3vmin;
     line-height: 1.6;
     text-align: center;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.7);
+    text-shadow: 0 2px 10px rgba(255, 255, 255, 0.7);
     white-space: pre-line; /* 줄바꿈(\n)을 그대로 표시 */
   }
 
@@ -60,20 +60,30 @@
     max-width: 320px;
   }
 
-  /* 재생 버튼 (자동재생 우회용) */
-  .play-btn {
+  /* 재생/정지 버튼을 세로로 묶는 컨테이너 (화면 우측 상단) */
+  .controls {
     position: fixed;
     top: 4vmin;
     right: 4vmin;
     z-index: 4;
-    background: rgba(255,255,255,0.15);
-    color: #dd0a0a;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5vmin;
+  }
+
+  .play-btn {
+    background: rgba(245, 12, 12, 0.15);
+    color: #242323;
     border: 1px solid rgba(255,255,255,0.4);
     border-radius: 20px;
-    padding: 1vmin 2.5vmin;
+    
     font-size: 2vmin;
     cursor: pointer;
     backdrop-filter: blur(4px);
+    
+    padding: 1vmin 0; /* 너비를 고정하므로 좌우 패딩을 0으로 변경 */
+    width: 12vmin; /* 버튼의 너비를 동일하게 고정 */
+    text-align: center; /* 글자를 버튼 중앙에 정렬 */
   }
 
   .play-btn:hover {
@@ -89,11 +99,12 @@
     <img class="background" src="https://64.media.tumblr.com/d21c6b890ab3987d79320644acada53f/34030ee375127bad-f5/s400x600/29bf506453afa145b8d905c1818b40119ba5d9cb.gifv" alt="background">
 
     <!-- 텍스트 -->
-    <div class="text">여기에 원하는 문구를 적어주세요.
-줄바꿈은 이렇게 자유롭게
-넣을 수 있어요.</div>
+    <div class="text">남존 여비란 건배사....
 
-    <!-- 오디오 플레이어 -->
+      언젠가 단무지님의 댓글이 생각나서 음악 게시해 봅니다.
+</div>
+
+    <!-- 오디오 플레이어 (자동재생, controls 없이 숨김) -->
     <div class="audio-wrap">
       <audio id="bgm" src="https://usanonki.github.io/music/stopwind.mp3" autoplay loop></audio>
     </div>
@@ -101,12 +112,20 @@
   </div>
 
   <!-- 자동재생은 브라우저 정책상 막힐 수 있어서, 클릭으로 재생하는 버튼을 추가했어요 -->
-  <button class="play-btn" onclick="playAudio()">▶ 재생</button>
+  <div class="controls">
+    <button class="play-btn" onclick="playAudio()">▶ 재생</button>
+    <button class="play-btn" onclick="stopAudio()">■ 정지</button>
+  </div>
 
   <script>
     function playAudio() {
       const audio = document.getElementById('bgm');
       audio.play();
+    }
+    function stopAudio() {
+      const audio = document.getElementById('bgm');
+      audio.pause();
+      audio.currentTime = 0; /* 처음부터 다시 재생되도록 시간 초기화 */
     }
   </script>
 
