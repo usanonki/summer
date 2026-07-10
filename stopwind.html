@@ -72,19 +72,20 @@
   }
 
   .play-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    width: 12vmin;
-    height: 4vmin;
-
     background: rgba(245, 12, 12, 0.15);
+    color: #242323;
     border: 1px solid rgba(255,255,255,0.4);
     border-radius: 20px;
     font-size: 2vmin;
     cursor: pointer;
     backdrop-filter: blur(4px);
+
+    width: 12vmin;      /* 버튼 너비 고정 */
+    height: 4vmin;      /* 버튼 높이 고정 */
+    line-height: 4vmin; /* 글자를 정확히 세로 중앙에 맞춤 */
+
+    text-align: center; /* 가로 중앙 정렬 */
+    padding: 0;         /* 내부 패딩 제거 (크기 통일 목적) */
   }
 
   .play-btn:hover {
