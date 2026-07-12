@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Enrico macias - L'amour c'est pour rien</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Brush+Script&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────
+       기본 초기화
+    ───────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html, body {
+      margin: 0; padding: 0;
+      width: 100%; height: 100%;
+      overflow: hidden;
+      background: #ffffff;
+    }
+
+    /* ─────────────────────────────────────────
+       카드 스테이지
+    ───────────────────────────────────────── */
+    .card-stage {
+      position: relative;
+      width: 100%;  
+      height: 100%; 
+      overflow: hidden;
+    }
+
+    /* 배경 이미지 레이어 */
+    .bg-layer {
+      position: absolute;
+      inset: 0;
+      background-color: #ffffff;
+      background-image:
+        
+        url('https://usanonki.github.io/photo/ryun.jpg');
+      background-repeat: no-repeat;
+      background-position: right bottom, right bottom;
+      background-size: 100% 100%, 84% 100%;
+    }
+
+    /* ─────────────────────────────────────────
+       제목 (h1)
+    ───────────────────────────────────────── */
+    h1 {
+      position: absolute;
+      top: 7%;
+      left: 7%;
+      margin: 0;
+      font-family: 'Nanum Brush Script', cursive;
+      font-size: clamp(16px, 6vmin, 54px); 
+      font-weight: 700;
+      white-space: nowrap;
+      pointer-events: none;
+      z-index: 10;
+
+      background: linear-gradient(90deg, #eedc40, #f8f8f7, #ee6b1f, #e60e4f);
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+
+      filter: drop-shadow(0 0 8px rgba(238, 220, 64, 0.5));
+
+      animation:
+        fadeInDown 2s ease-out forwards,
+        shine 6s ease-in-out infinite;
+    }
+
+    /* ─────────────────────────────────────────
+       감성 텍스트 영역
+    ───────────────────────────────────────── */
+    .text-area {
+      position: absolute;
+      top: 22%;
+      left: 7%;
+      width: 80%;
+      z-index: 11;
+    }
+
+    .text-block {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      font-family: 'Nanum Brush Script', cursive;
+      font-size: clamp(13px, 5vmin, 42px);
+      line-height: 1.55;
+      color: #e8f800;
+      text-shadow:
+        2px 2px 6px rgba(10, 50, 10, 0.9),
+        0 0 14px rgba(0, 0, 0, 0.5);
+
+      opacity: 0;
+      visibility: hidden;
+      
+      /* 💡 수정 포인트: 트랜지션 시간을 0.6초로 줄이고 visibility 속성도 동기화 */
+      transition: opacity 0.6s ease-in-out, visibility 0.6s ease-in-out;
+      pointer-events: none;
+    }
+
+    .text-block.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* ─────────────────────────────────────────
+       하단 고정 영역: 서명 + 오디오
+    ───────────────────────────────────────── */
+    .bottom-bar {
+      position: absolute;
+      bottom: 4%;
+      left: 7%;
+      right: 7%;
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1.2vmin;
+    }
+
+    .signature {
+      font-family: 'Nanum Brush Script', cursive;
+      font-size: clamp(12px, 4.5vmin, 38px);
+      color: #d4b010;
+      line-height: 1.1;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
+      opacity: 0;
+      animation: fadeInUp 1.5s ease-out 3.5s forwards;
+    }
+
+    audio {
+      display: block;
+      width: clamp(160px, 45vmin, 380px);
+      height: 32px;
+      border: 1.5px solid #70da0d;
+      border-radius: 25px;
+      outline: none;
+      opacity: 0;
+      animation: fadeInUp 1.5s ease-out 4s forwards;
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes shine {
+      0%   { background-position: 0%   50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0%   50%; }
+    }
+  </style>
+</head>
+<body>
+<div class="card-stage">
+
+  <!-- 배경 이미지 레이어 -->
+  <div class="bg-layer"></div>
+
+  <!-- 제목 -->
+  <h1>Enrico macias - L'amour c'est pour rien</h1>
+
+  <!-- 감성 텍스트 -->
+  <div class="text-area">
+    <div id="t1" class="text-block">
+      1960년대 중반 이후 우리 나라에는 샹송과 칸쵸네의 열풍이<br>
+      불었는데 그 앞장을 선 것이 샹송이었다.<br>
+      이 당시 한국에서는 아다모와 앙리코 마시아스의 인기가 <br>
+      높았는데 이 곡은 앙리코 마시아스의 곡이다.
+    </div>
+    <div id="t2" class="text-block">
+      알제리 내전으로 존경하던 악단 지휘자와 친구와<br>
+      사촌이 총으로 살해당하자  정치를 초월한 노래를 만들자고<br>
+      결심하고 1962년 프랑스 마르세유에서 가수가 되었다.<br>
+      1964년 파리로 진출할 무렵 만든곡이 이 곡이었다.
+    </div>
+    <div id="t3" class="text-block">
+      사랑은 살 수도 팔 수도 없으며 아무 가치가  <br>
+      없을 것 같으면서도 무엇보다 중요하다며<br>
+      L’amour, C’est Pour Rien (Love, It's For Nothing)<br>
+      (사랑, 그것 헛되도다)라고 노래하고 있다.
+    </div>
+</div>
+
+  <!-- 하단 고정: 서명 + 오디오 -->
+  <div class="bottom-bar">
+    <div class="signature">Maestra</div>
+
+    <!-- 오디오 파일 -->
+    <audio id="mainAudio"
+      src="https://64.media.tumblr.com/fdd644306f2ec241fe83cb5d73eed280/dbd11c2c78948836-df/533f7e2cb878fc8797e1d94c62b948279c086d0c.mp3"
+      controls autoplay loop>
+    </audio>
+  </div>
+</div>
+
+<script>
+  const audio = document.getElementById('mainAudio');
+  audio.volume = 0.45;
+
+  const blocks = [
+    { el: document.getElementById('t1'), from: 0,  to: 20 },
+    { el: document.getElementById('t2'), from: 20, to: 40 },
+    { el: document.getElementById('t3'), from: 40, to: Infinity },
+  ];
+
+  let activeBlock = null;
+  let fadeTimer = null; // 💡 새 텍스트 표시 타이머
+
+  function updateText(ct) {
+    const target = blocks.find(b => ct >= b.from && ct < b.to) || null;
+    if (target === activeBlock) return;
+
+    const prevBlock = activeBlock;
+    activeBlock = target;
+
+    // 진행 중인 타이머가 있다면 초기화 (구간 점프 시 꼬임 방지)
+    if (fadeTimer) clearTimeout(fadeTimer);
+
+    if (prevBlock) {
+      // 1. 이전 텍스트를 먼저 서서히 숨김
+      prevBlock.el.classList.remove('show');
+      
+      // 2. 이전 텍스트가 완전히 사라지는 시간(0.6초)을 기다렸다가 새 텍스트 표시
+      if (target) {
+        fadeTimer = setTimeout(() => {
+          target.el.classList.add('show');
+        }, 600); // 600ms = 0.6초 대기
+      }
+    } else {
+      // 처음 0초에 시작할 때는 대기 시간 없이 바로 첫 텍스트 표시
+      if (target) {
+        target.el.classList.add('show');
+      }
+    }
+  }
+
+  audio.addEventListener('timeupdate', () => updateText(audio.currentTime));
+  updateText(0);
+
+  // 화면 클릭 시 오디오 재생 보장 (브라우저 정책 대응)
+  document.body.addEventListener('click', () => {
+    audio.play().catch(() => {});
+  }, { once: true });
+</script>
+</body>
+</html>
