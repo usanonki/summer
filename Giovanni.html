@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giovanni Marradi - Sacristy</title>
+    <style>
+        /* 화면 전체를 유연하게 쓰기 위한 설정 */
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+
+        body {
+            font-family: 'Malgun Gothic', '맑은 고딕', 'Apple SD Gothic Neo', sans-serif;
+            background-image: url('https://usanonki.github.io/photo/igidae.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            text-align: center;
+            color: #eee;
+            
+            /* [핵심] 상단 레이아웃과 하단 레이아웃을 양끝으로 밀어내는 설정 */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-sizing: border-box;
+            padding: 60px 20px;
+
+            position:relative;
+            margin:0;
+            overflow:hidden;
+        }
+        
+        /* 상단 텍스트 영역 */
+        .top-content {
+            position:absolute;
+            top:6%;
+            left:50%;
+            transform:translateX(-50%);
+            width:100%;
+        }
+        h1 { 
+            color: #ffffff; 
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+            margin-bottom: 10px; 
+            font-size: 2.0em;
+        }
+        p {
+            color: #ffffe0; 
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.9);
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        /* 하단 플레이어 + 아이디 영역 */
+        .bottom-content {
+            position:absolute;
+            bottom:3%;
+            left:50%;
+            transform:translateX(-50%);
+            width:100%;
+        }
+        
+        /* Maestra 아이디 스타일 */
+        .user-id {
+            color: #ffffff;
+            font-size: 1.1em;
+            font-weight: bold;
+            letter-spacing: 2px; /* 글자 간격을 넓혀 고급스러운 느낌 부여 */
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+            margin-bottom: 8px; /* 오디오 플레이어와의 간격 */
+            opacity: 0.9;       /* 살짝 투명하게 하여 은은하게 노출 */
+        }
+
+        audio {
+            width: 90%;
+            max-width: 350px;
+            height: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+            border-radius: 30px;
+            border: 1.5px solid #70da0d;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 상단 영역 -->
+    <div class="top-content">
+        <h1>Giovanni Marradi - Sacristy</h1>
+        <p>편하게 감상하세요 🎵</p>
+    </div>
+    
+    <!-- 하단 영역 (아이디 + 플레이어) -->
+    <div class="bottom-content">
+        <div class="user-id">Maestra</div>
+        <audio controls autoplay loop>
+            <source src="https://blog.kakaocdn.net/dn/bf7tlQ/btrdDKQYKfz/deH1jnFAlKGfnb2rKxRR8k/Giovanni%20Marradi%20-%20Sacristy.mp3?attach=1&knm=tfile.mp3" 
+                    type="audio/mpeg">
+            브라우저가 audio 태그를 지원하지 않습니다.
+        </audio>
+    </div>
+
+</body>
+</html>
