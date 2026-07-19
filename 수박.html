@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Watermelon Summer</title>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background-color: #ffffff;
+            background-image: 
+                url('https://usanonki.github.io/photo/waterlemon.gif');
+            background-attachment: scroll;     /* 작은 iframe에 더 적합 */
+            background-repeat: no-repeat;
+            background-position: right bottom;
+            background-size: 100% 100%, 85% auto;   /* iframe용으로 조정 */
+            position: relative;                 /* 텍스트 위치를 위해 추가 */
+            overflow: hidden;
+        }
+
+        /* ===== 메인 텍스트 ===== */
+        .overlay-text {
+            position: absolute;
+            left: 6%;
+            top: 25%;
+            color: #ffffff;
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 2.6rem;
+            font-weight: 700;
+            line-height: 1.4;
+            text-shadow: 
+                0 0 15px rgba(0, 0, 0, 0.9),
+                0 0 30px rgba(0, 0, 0, 0.7),
+                3px 3px 0 rgba(0, 0, 0, 0.5);
+            z-index: 10;
+            max-width: 55%;
+            pointer-events: none;
+        }
+
+        /* 모바일/작은 iframe 대응 */
+        @media (max-width: 600px) {
+            .overlay-text {
+                font-size: 1.8rem;
+                left: 10%;
+                top: 20%;
+                max-width: 75%;
+            }
+        }
+
+        audio {
+            width: 60%;
+            max-width: 200px;
+            height: 22px;
+            right: 15px;
+            bottom: 35px;
+            position: fixed;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+            border-radius: 30px;
+            border: 1.5px solid #8ac0e4;
+            z-index: 20;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- 오버레이 텍스트 -->
+    <div class="overlay-text">
+        무더운 여름,<br>
+        시원한 수박 한 조각으로<br>
+        더위를 날려버리세요 🌿
+    </div>
+
+    <!-- 오디오 -->
+    <audio id="mainAudio" 
+           src="https://64.media.tumblr.com/26b028734682d5f862b4efc1ef582768/ce6a85403b1b6a2d-a6/0faaea6ca94919372b9dc4fa5afe16c476fc97b3.mp3"
+           controls autoplay loop></audio>
+
+    <script>
+        const audio = document.getElementById("mainAudio");
+        audio.volume = 0.45;
+    </script>
+
+</body>
+</html>
