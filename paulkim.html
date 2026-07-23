@@ -169,7 +169,11 @@
         <p><strong> 따뜻한 추억과 위로를 담은 발라드</strong></p>
       </div>
 
-      <audio src="https://usanonki.github.io/music/paulkim.mp3" controls autoplay loop></audio>
-    </div>
+      <audio id="mainAudio" src="https://usanonki.github.io/music/paulkim.mp3" controls autoplay loop></audio>
+    
+    <script>
+        const audio = document.getElementById("mainAudio");
+        audio.volume = 0.45; // 0.0 ~ 1.0 사이 값, 0.45 = 45%
+    </script>
   </body>
 </html>
