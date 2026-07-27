@@ -23,7 +23,7 @@
 
     .player-ui {
       position: absolute;
-      bottom: 10px;
+      bottom: 20px;
       left: 20px;
       display: flex;
       flex-direction: column;
@@ -72,8 +72,8 @@
     }
 
     .controls button {
-      width: 33px;
-      height: 33px;
+      width: 38px;
+      height: 38px;
       border-radius: 50%;
       cursor: pointer;
       display: flex;
@@ -85,8 +85,8 @@
     }
 
     #playPauseBtn {
-      width: 40px;
-      height: 40px;
+      width: 44px;
+      height: 44px;
       font-size: 20px;
     }
 
@@ -119,16 +119,45 @@
       color: #ffffff;
       border: 1px solid rgba(255, 255, 255, 0.3);
     }
+
+    /* 볼륨 컨테이너 (Flexbox 적용) */
+.volume-container {
+  display: flex;
+  align-items: center;  /* 세로 중앙 정렬 */
+  gap: 10px;            /* 아이콘과 볼륨바 사이 간격 */
+  margin-top: 14px;
+}
+
+/* 볼륨 아이콘 스타일 */
+#volumeIcon {
+  font-size: 16px;
+  cursor: pointer;
+  width: 20px;          /* 아이콘 교체 시 위치 흔들림 방지 */
+  text-align: center;
+  transition: opacity 0.2s;
+}
+
+#volumeIcon:hover {
+  opacity: 0.8;
+}
+
+/* 기존 #volumeBar 스타일에서 margin-top만 제거 */
+#volumeBar {
+  width: 120px;
+  cursor: pointer;
+  /* 👇 이 한줄  추가하면 컬러가 바뀔까???! */
+  accent-color: #e9d26f; /* 부드러운 노란색 (재생 중인 곡 색상과 통일) */
+}
   </style>
 </head>
 <body>
 
   <div class="player-ui">
-    <h1>아래에서 선택 하세요</h1>
+    <h1>🎵 Playlist</h1>
 
     <ul class="track-list" id="trackList">
-      <li>새색시 시집가네</li>
-      <li>아득히 먼 곳</li>
+      <li>우울한 우연</li>
+      <li>진정난 몰랐었네</li>
       <li>겨울애상</li>
       <li>돌아가는삼각지</li>
     </ul>
@@ -140,90 +169,205 @@
       <button id="playPauseBtn"><i class="fa-solid fa-play"></i></button>
       <button id="nextBtn"><i class="fa-solid fa-forward"></i></button>
     </div>
-  </div>
+
+    <!-- 🔊 볼륨 컨트롤 영역 (아이콘 + 볼륨바) -->
+<div class="volume-container">
+  <i class="fa-solid fa-volume-high" id="volumeIcon"></i>
+  <input type="range" id="volumeBar" min="0" max="1" step="0.01" value="0.4">
+</div>
 
   <script>
     /* ============================
-       ✔ 프리셋 선택 (여기만 바꾸면 됨)
-       ============================ */
-    const PRESET = "dark";   // "light" / "neon" / "dark"
+    ✔ 프리셋 선택
+    ============================ */
+const PRESET = "light";   // "light" / "neon" / "dark"
 
-    /* 버튼에 프리셋 적용 */
-    function applyPreset() {
-      const prev = document.getElementById("prevBtn");
-      const play = document.getElementById("playPauseBtn");
-      const next = document.getElementById("nextBtn");
+function applyPreset() {
+  const prev = document.getElementById("prevBtn");
+  const play = document.getElementById("playPauseBtn");
+  const next = document.getElementById("nextBtn");
 
-      prev.classList.add(`btn-${PRESET}`);
-      play.classList.add(`btn-${PRESET}`);
-      next.classList.add(`btn-${PRESET}`);
+  prev.classList.add(`btn-${PRESET}`);
+  play.classList.add(`btn-${PRESET}`);
+  next.classList.add(`btn-${PRESET}`);
+}
+
+applyPreset();
+
+
+/* ============================
+    ✔ 오디오 플레이어 기능
+    ============================ */
+const playlist = [
+  { title: "우울한 우연", url: "https://a.tumblr.com/tumblr_q1mdz8xm1t1yr33tko1.mp3" },
+  { title: "진정난 몰랐었네", url: "https://blog.kakaocdn.net/dn/broKZO/btsDNG3wMxw/umh8BkKCmOfGJKuQPb1bwK/tfile.mp3" },
+  { title: "겨울애상", url: "https://a.tumblr.com/tumblr_q2sv2ha8wt1xuzllbo1.mp3" },
+  { title: "돌아가는삼각지", url: "https://cldup.com/nQ6Jv1g-Y4.mp3" }
+];
+
+let currentIndex = 0;
+const player = document.getElementById("musicPlayer");
+const trackListItems = document.querySelectorAll("#trackList li");
+const playPauseBtn = document.getElementById("playPauseBtn");
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
+const volumeBar = document.getElementById("volumeBar");
+
+function playTrack(index) {
+  currentIndex = (index + playlist.length) % playlist.length;
+  player.src = playlist[currentIndex].url;
+  player.play();
+  updateActiveTrack(currentIndex);
+}
+
+function updateActiveTrack(index) {
+  trackListItems.forEach((item, i) => {
+    item.classList.toggle("active", i === index);
+  });
+}
+
+function togglePlayPause() {
+  if (player.paused) {
+    player.play();
+  } else {
+    player.pause();
+  }
+}
+
+player.addEventListener("play", () => {
+  playPauseBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+});
+
+player.addEventListener("pause", () => {
+  playPauseBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+});
+
+// 재생/일시정지 버튼
+playPauseBtn.addEventListener("click", togglePlayPause);
+
+
+/* ============================
+    ✔ 페이드 효과 개선 (볼륨 에러 방지 & 설정값 반영)
+    ============================ */
+function fadeOut(callback) {
+  let vol = player.volume;
+  const fade = setInterval(() => {
+    // 음수로 내려가 에러(DOMException)가 나는 것을 방지
+    vol = Math.max(0, vol - 0.04); 
+    player.volume = vol;
+    
+    if (vol === 0) {
+      clearInterval(fade);
+      callback();  // 다음 곡 재생 호출
     }
+  }, 40);
+}
 
-    applyPreset();
-
-
-    /* ============================
-       ✔ 오디오 플레이어 기능
-       ============================ */
-    const playlist = [
-      { title: "새색시 시집가네", url: "https://archive.org/download/20250428_20250428_0229/%ED%99%8D%EB%AF%BC%20-%20%EC%83%88%EC%83%89%EC%8B%9C%20%EC%8B%9C%EC%A7%91%EA%B0%80%EB%84%A4.mp3" },
-      { title: "아득히 먼 곳", url: "https://blog.kakaocdn.net/dn/cWxrKe/btshaqCbdQO/YerYlqC9SRmXDIi34SLfH1/tfile.mp3" },
-      { title: "겨울애상", url: "https://a.tumblr.com/tumblr_q2sv2ha8wt1xuzllbo1.mp3" },
-      { title: "돌아가는삼각지", url: "https://cldup.com/nQ6Jv1g-Y4.mp3" }
-    ];
-
-    let currentIndex = 0;
-    const player = document.getElementById("musicPlayer");
-    const trackListItems = document.querySelectorAll("#trackList li");
-    const playPauseBtn = document.getElementById("playPauseBtn");
-    const prevBtn = document.getElementById("prevBtn");
-    const nextBtn = document.getElementById("nextBtn");
-
-    function playTrack(index) {
-      currentIndex = (index + playlist.length) % playlist.length;
-      player.src = playlist[currentIndex].url;
-      player.play();
-      updateActiveTrack(currentIndex);
+function fadeIn() {
+  let vol = 0;
+  // 하드코딩된 0.4 대신, 사용자가 맞춘 현재 볼륨 슬라이더 값 가져오기
+  const targetVolume = parseFloat(volumeBar.value); 
+  player.volume = 0;
+  
+  const fade = setInterval(() => {
+    // 목표 볼륨을 넘지 않도록 방지
+    vol = Math.min(targetVolume, vol + 0.04); 
+    player.volume = vol;
+    
+    if (vol >= targetVolume) {
+      clearInterval(fade);
     }
+  }, 40);
+}
 
-    function updateActiveTrack(index) {
-      trackListItems.forEach((item, i) => {
-        item.classList.toggle("active", i === index);
-      });
-    }
 
-    function togglePlayPause() {
-      if (player.paused) {
-        player.play();
-      } else {
-        player.pause();
-      }
-    }
-
-    player.addEventListener("play", () => {
-      playPauseBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
-    });
-
-    player.addEventListener("pause", () => {
-      playPauseBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
-    });
-
-    trackListItems.forEach((item, index) => {
-      item.addEventListener("click", () => {
+/* ============================
+    ✔ 이벤트 리스너 통합 적용
+    ============================ */
+// 1. 리스트 아이템 클릭 시
+trackListItems.forEach((item, index) => {
+  item.addEventListener("click", () => {
+    if (currentIndex !== index) {
+      fadeOut(() => {
         playTrack(index);
+        fadeIn();
       });
-    });
+    }
+  });
+});
 
-    playPauseBtn.addEventListener("click", togglePlayPause);
-    prevBtn.addEventListener("click", () => playTrack(currentIndex - 1));
-    nextBtn.addEventListener("click", () => playTrack(currentIndex + 1));
+// 2. 이전 곡, 다음 곡, 곡 종료 시
+prevBtn.addEventListener("click", () => {
+  fadeOut(() => {
+    playTrack(currentIndex - 1);
+    fadeIn();
+  });
+});
 
-    player.addEventListener("ended", () => {
-      playTrack(currentIndex + 1);
-    });
+nextBtn.addEventListener("click", () => {
+  fadeOut(() => {
+    playTrack(currentIndex + 1);
+    fadeIn();
+  });
+});
 
-    player.src = playlist[currentIndex].url;
-    updateActiveTrack(currentIndex);
+player.addEventListener("ended", () => {
+  fadeOut(() => {
+    playTrack(currentIndex + 1);
+    fadeIn();
+  });
+});
+
+/* ============================
+    ✔ 초기화
+    ============================ */
+player.src = playlist[currentIndex].url;
+player.volume = volumeBar.value; // 초기 볼륨도 슬라이더 값 기준으로 맞춤
+updateActiveTrack(currentIndex);
+
+// 🔊 볼륨 조절 기능
+volumeBar.addEventListener("input", () => {
+  player.volume = volumeBar.value;
+});
+
+const volumeIcon = document.getElementById("volumeIcon");
+let lastVolume = 0.4; // 음소거 해제 시 복구할 볼륨 기억
+
+// 볼륨 크기에 따라 아이콘 변경하는 함수
+function updateVolumeIcon(vol) {
+  volumeIcon.className = "fa-solid "; // 기존 클래스 초기화
+  
+  if (vol === 0) {
+    volumeIcon.classList.add("fa-volume-xmark"); // 🔇 음소거
+  } else if (vol < 0.3) {
+    volumeIcon.classList.add("fa-volume-off");   // 🔈 작은 볼륨
+  } else if (vol < 0.7) {
+    volumeIcon.classList.add("fa-volume-low");   // 🔉 중간 볼륨
+  } else {
+    volumeIcon.classList.add("fa-volume-high");  // 🔊 큰 볼륨
+  }
+}
+
+// 1. 볼륨 슬라이더 조절 시 아이콘 업데이트
+volumeBar.addEventListener("input", () => {
+  const vol = parseFloat(volumeBar.value);
+  player.volume = vol;
+  updateVolumeIcon(vol);
+});
+
+// 2. 아이콘 클릭 시 음소거 / 음소거 해제 토글
+volumeIcon.addEventListener("click", () => {
+  if (player.volume > 0) {
+    lastVolume = player.volume; // 현재 볼륨 저장
+    player.volume = 0;
+    volumeBar.value = 0;
+    updateVolumeIcon(0);
+  } else {
+    player.volume = lastVolume; // 이전 볼륨으로 복구
+    volumeBar.value = lastVolume;
+    updateVolumeIcon(lastVolume);
+  }
+});
   </script>
 </body>
 </html>
