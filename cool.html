@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <title>쿨 (COOL) : 아로하</title>
+
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        height: 100%;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        height: 100%;
+        position: relative;
+        background: #000;
+      }
+
+      /* PNG 배경 */
+      body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('https://64.media.tumblr.com/e280ecdfc85f8c532f795695f15d4897/efa3d955158c5ccf-09/s2048x3072/e24520a8f3f4c0bb45d2e225275d833e421f15c4.gifv') no-repeat center center;
+        background-size: 100% 100%;
+        /* filter 제거됨 */
+        z-index: -2;
+        opacity: 1;
+        transition: opacity 1.8s ease-in-out;
+      }
+
+      /* 영상 레이어 */
+      .effect-layer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        overflow: hidden;
+        opacity: 0;
+        transition: opacity 1.8s ease-in-out;
+        z-index: -1;
+      }
+
+      .effect-layer video {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.75;
+        mix-blend-mode: screen;
+        filter: brightness(1.3);
+        pointer-events: none;
+      }
+
+      /* 우측 하단 오디오 */
+      .audio-fixed {
+        position: fixed;
+        right: 40px;
+        bottom: 30px;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+      }
+
+      .track-info {
+        background: rgba(0, 0, 0, 0.25);
+        color: #fffffd;
+        padding: 15px 20px;
+        border-radius: 15px;
+        margin-bottom: 12px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.55rem;
+        line-height: 1.6;
+        box-shadow: 0 4px 10px rgba(27, 26, 26, 0.3);
+      }
+
+      .track-info p { margin: 0; }
+      .track-info strong { color: #b3e5ff; }
+
+      .audio-fixed audio {
+        border: 2.5px solid #6c96f0;
+        border-radius: 40px;
+        width: 300px;
+        height: 20px;
+        background-color: rgba(255, 255, 255, 0.8);
+      }
+
+      /* 타이틀 */
+      h1 {
+        position: fixed;
+        top: 10px;
+        left: 13%;
+        transform: translateX(-50%);
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        background: linear-gradient(90deg, #e1ee70, #ffe6ff, #b3e5ff, #ffd6f5);
+        background-size: 300% 300%;
+        -webkit-background-clip: text;
+        color: transparent;
+        animation:
+          fadeIn 2.2s ease-out forwards,
+          shine 6s ease-in-out infinite,
+          glow 4s ease-in-out infinite;
+        pointer-events: none;
+        white-space: nowrap;
+        z-index: 10;
+      }
+
+      @keyframes fadeIn {
+        0% { opacity: 0; transform: translate(-50%, -10px); }
+        100% { opacity: 1; transform: translate(-50%, 0); }
+      }
+
+      @keyframes shine {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+
+      @keyframes glow {
+        0% { text-shadow: 0 0 10px rgba(255, 200, 255, 0.4); }
+        50% { text-shadow: 0 0 25px rgba(255, 150, 255, 0.8); }
+        100% { text-shadow: 0 0 10px rgba(255, 200, 255, 0.4); }
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1> Happy Day</h1>
+
+    <div class="effect-layer" id="videoLayer">
+      <video src="https://64.media.tumblr.com/6feb5d57717e2afb23f3bfe0ffbbcaea/98f97a8dad60053d-55/173b8ec838c59b6be6e27907e36d1c4c2a3e36b1.mov" autoplay loop  muted playsinline></video>
+    </div>
+
+    <div class="audio-fixed">
+      <div class="track-info">
+        <p><strong>아티스트:</strong> 쿨 (COOL) : 아로하</p>
+        <p><strong>앨범:</strong> 『First Whisper』</p>
+        <p><strong>발매일:</strong> 2001년 12월 6일</p>
+        <p><strong>장르:</strong> 발라드</p>
+        <p><strong>작곡,작사:</strong> 위종수 ; 김태훈</p>
+      </div>
+      <audio src="https://a.tumblr.com/tumblr_qbwjpx4tom1xuzllbo1.mp3"  controls autoplay loop></audio>
+    </div>
+
+    <script>
+      const videoLayer = document.getElementById('videoLayer');
+
+      // 시간 설정 (초)
+      const PNG_TIME = 30;    // PNG만 보이는 시간
+      const MP4_TIME = 10;    // MP4만 보이는 시간
+
+      function showPNG() {
+        // PNG 보이기 + 영상 완전 숨기기
+        document.body.classList.remove('show-video');
+        videoLayer.style.opacity = 0;
+      }
+
+      function showMP4() {
+        // 영상 보이기 + PNG 완전 숨기기
+        document.body.classList.add('show-video');
+        videoLayer.style.opacity = 1;
+      }
+
+      // 초기 상태: PNG
+      showPNG();
+
+      function startCycle() {
+        // 1. PNG 30초
+        setTimeout(() => {
+          showMP4();
+
+          // 2. MP4 10초 후 다시 PNG
+          setTimeout(() => {
+            showPNG();
+
+            // 다시 처음부터 반복
+            setTimeout(startCycle, PNG_TIME * 1000);
+          }, MP4_TIME * 1000);
+
+        }, PNG_TIME * 1000);
+      }
+
+      window.addEventListener('load', () => {
+        startCycle();
+      });
+    </script>
+
+    <style>
+      /* 영상이 보일 때 PNG를 완전히 숨김 */
+      body.show-video::before {
+        opacity: 0;
+      }
+    </style>
+  </body>
+</html>
