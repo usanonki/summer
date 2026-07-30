@@ -184,6 +184,9 @@
   var player;
   var isReady = false;
 
+  // 곡 ID 목록 (배열)
+  const videoIds = ['jyHki8rh_88', 'WGnwqoZ1Vzc', 'sBrgQ3yyjzY', 'MwpyP7luIN4'];
+
   const btn = document.getElementById("playPauseBtn");
   const volumeSlider = document.getElementById("volumeSlider");
   const trackList = document.getElementById("trackList");
@@ -194,7 +197,6 @@
     player = new YT.Player('player', {
       height: '1',
       width: '1',
-      videoId: 'jyHki8rh_88',
       playerVars: {
         autoplay: 0,
         controls: 0,
@@ -202,10 +204,7 @@
         fs: 0,
         modestbranding: 1,
         rel: 0,
-        showinfo: 0,
-        loop: 1,  
-        playlist: 'jyHki8rh_88,WGnwqoZ1Vzc,sBrgQ3yyjzY,MwpyP7luIN4'
-        
+        showinfo: 0
       },
       events: {
         'onReady': function () {
@@ -213,39 +212,71 @@
           trackList.classList.add('show');
           controlsRow.classList.add('show');
           player.setVolume(40);
+
+          // 4번째 곡이 끝나도 1번째 곡으로 돌아가 계속 재생하게 ?
+          player.setLoop(true);
+          
+          // 초기 플레이리스트 로드 (첫번째 곡부터 준비)
+          player.cuePlaylist({
+            playlist: videoIds,
+            index: 0
+          });
         },
         'onStateChange': function (event) {
           if (event.data === YT.PlayerState.PLAYING) {
             btn.innerHTML = "⏸";
-          } else {
+            
+            // 재생 중인 곡의 인덱스를 가져와 리스트 하이라이트(active) 업데이트
+            const currentIndex = player.getPlaylistIndex();
+            const items = document.querySelectorAll('#trackList div');
+            
+            items.forEach((item, index) => {
+              if (index === currentIndex) {
+                item.classList.add('active');
+
+              if (currentIndex === videoIds.length - 1) {
+                msg.textContent = `♫ ${item.textContent} ♫ (재생후 · 첫곡부터 다시 재생됩니다)`;
+              } else {
+                msg.textContent = `♫ ${item.textContent} ♫`;
+             }  
+                
+              } else {
+                item.classList.remove('active');
+              }
+            });
+            msg.style.opacity = '0.4';
+
+          } else if (event.data === YT.PlayerState.PAUSED) {
             btn.innerHTML = "▶";
-          }
+
+          } else if (event.data === YT.PlayerState.ENDED) {
+  btn.innerHTML = "▶";
+
+  const currentIndex = player.getPlaylistIndex();
+  // 방금 끝난 곡이 마지막 곡이었다면 → 첫 곡으로 되돌려 재생
+  if (currentIndex === videoIds.length - 1) {
+    player.playVideoAt(0);
+  }
+  // 중간 곡이면 YouTube 플레이리스트가 알아서 다음 곡으로 넘어가므로
+  // 여기서 별도 처리를 안 해도 됩니다.
+}
         }
       }
     });
   }
 
-  // 곡 클릭 → 재생
-  document.querySelectorAll('#trackList div').forEach(item => {
+  // 곡 클릭 → 해당 위치(index)부터 플레이리스트 계속 재생
+  document.querySelectorAll('#trackList div').forEach((item, index) => {
     item.addEventListener('click', function (e) {
       e.stopPropagation();
       if (!isReady) return;
 
-      const vid = this.getAttribute('data-id');
-      player.loadVideoById(vid);
-
-      // active 표시
-      document.querySelectorAll('#trackList div').forEach(i => i.classList.remove('active'));
-      this.classList.add('active');
-
-      msg.textContent = this.textContent + ' 재생 중입니다';
-      msg.style.opacity = '0.4';
+      // loadVideoById 대신 playVideoAt으로 플레이리스트 순서 유지!
+      player.playVideoAt(index);
     });
   });
 
-  
-
-  // 볼륨
+  // 볼륨 조절
   volumeSlider.addEventListener('input', function () {
     if (!isReady) return;
     player.setVolume(this.value);
