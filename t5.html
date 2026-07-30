@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>클릭하면 유튜브 음악 재생</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 100vw;
+      height: 100vh;
+      background: url('https://usanonki.github.io/photo/kasa.gif') no-repeat center center / cover;
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+      color: #fc0404;
+      font-family: sans-serif;
+      user-select: none;
+    }
+
+    .message {
+      position: absolute;
+      bottom: 25px;
+      left: 25px;
+      font-size: 1.4rem;
+      background: rgba(0, 0, 0, 0.28);
+      padding: 6px 12px;
+      border-radius: 8px;
+      backdrop-filter: blur(2px);
+      opacity: 0.8;
+      transition: opacity 0.4s;
+      z-index: 10;
+    }
+
+    .track-list {
+      position: absolute;
+      bottom: 70px;
+      left: 25px;
+      color: #ffffff;
+      font-size: 1.3rem;
+      opacity: 0;
+      transition: opacity 1.5s ease;
+      background: rgba(0, 0, 0, 0.28);
+      padding: 8px 14px;
+      border-radius: 8px;
+      backdrop-filter: blur(2px);
+      z-index: 20;
+    }
+
+    .track-list.show {
+      opacity: 0.85;
+    }
+
+    .track-list div {
+      cursor: pointer;
+      margin-bottom: 6px;
+      transition: color 0.4s ease;
+    }
+
+    .track-list div.active {
+      color: #ffd76b;
+      opacity: 1.0;
+      font-weight: bold;
+    }
+
+    .controls-row {
+      position: absolute;
+      bottom: 25px;
+      right: 25px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      opacity: 0;
+      transition: opacity 1.5s ease;
+      z-index: 20;
+      
+    }
+
+    .controls-row.show {
+      opacity: 0.85;
+    }
+
+    #playPauseBtn {
+      font-size: 1.4rem;
+      color: #f7e7b8;
+      cursor: pointer;
+      transition: opacity 0.3s ease, transform 0.2s ease;
+    }
+
+    #playPauseBtn:hover {
+      opacity: 1.0;
+      transform: scale(1.1);
+    }
+
+    .vol-icon {
+      font-size: 1.2rem;
+      color: #fff;
+    }
+
+    #volumeSlider {
+      width: 120px;
+      cursor: pointer;
+    }
+
+    /* 유튜브 플레이어 숨김 */
+    #player {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+      z-index: -1;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- 통합 컨트롤러 (재생/일시정지 + 볼륨) -->
+  <div class="controls-row" id="controlsRow">
+    <span id="playPauseBtn">⏸</span>
+    <span class="vol-icon">🔊</span>
+    <input type="range" id="volumeSlider" min="0" max="100" value="40">
+  </div>
+
+  <!-- 트랙 리스트 -->
+  <div id="trackList" class="track-list">
+    <div data-id="jyHki8rh_88">사람이 꽃보다 아름다워</div>
+    <div data-id="WGnwqoZ1Vzc">여고시절</div>
+    <div data-id="sBrgQ3yyjzY">추억</div>
+    <div data-id="MwpyP7luIN4">여고졸업반</div>
+  </div>
+
+  <div class="message" id="msg">화면을 클릭하거나 곡을 선택하면 음악이 시작됩니다</div>
+
+  <!-- 유튜브 플레이어 컨테이너 -->
+  <div id="player"></div>
+
+  <script>
+    // 유튜브 IFrame API 로드
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    var player;
+    var isPlaying = false;
+    var isReady = false;
+    var isPaused = false;
+
+    // API 준비 완료 시 작동
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player('player', {
+        height: '1',
+        width: '1',
+        videoId: 'jyHki8rh_88',
+        playerVars: {
+          autoplay: 0,
+          controls: 0,
+          disablekb: 1,
+          fs: 0,
+          modestbranding: 1,
+          rel: 0,
+          loop: 1,
+          playlist: 'jyHki8rh_88,WGnwqoZ1Vzc,sBrgQ3yyjzY,MwpyP7luIN4'
+        },
+        events: {
+          'onReady': function(event) {
+            isReady = true;
+
+            // UI 표시 (fade-in)
+            document.getElementById('trackList').classList.add('show');
+            document.getElementById('controlsRow').classList.add('show');
+
+            // 기본 볼륨 설정
+            player.setVolume(40);
+          }
+        }
+      });
+    }
+
+    // 곡 제목 클릭 시
+    document.querySelectorAll('#trackList div').forEach(item => {
+      item.addEventListener('click', function(e) {
+        e.stopPropagation(); // body 클릭 이벤트 중단
+        if (!isReady) return;
+
+        const vid = this.getAttribute('data-id');
+        player.loadVideoById(vid);
+        player.playVideo();
+        player.unMute();
+        
+        isPlaying = true;
+        isPaused = false;
+        document.getElementById('playPauseBtn').textContent = '⏸';
+
+        // 선택 항목 강조
+        document.querySelectorAll('#trackList div').forEach(i => i.classList.remove('active'));
+        this.classList.add('active');
+
+        // 메시지 변경
+        document.getElementById('msg').textContent = this.textContent + ' 재생 중입니다';
+      });
+    });
+
+    // 화면(body) 바탕 클릭 시 (첫 재생)
+    document.body.addEventListener('click', function() {
+      if (!isReady || isPlaying) return;
+
+      player.playVideo();
+      player.unMute();
+      isPlaying = true;
+      isPaused = false;
+      document.getElementById('playPauseBtn').textContent = '⏸';
+
+      // 첫 곡 강조
+      const first = document.querySelector('#trackList div[data-id="jyHki8rh_88"]');
+      if (first) first.classList.add('active');
+
+      document.getElementById('msg').textContent = (first ? first.textContent : '음악') + ' 재생 중입니다';
+      document.getElementById('msg').style.opacity = '0.4';
+    });
+
+    // 재생 / 일시정지 버튼
+    document.getElementById('playPauseBtn').addEventListener('click', function(e) {
+      e.stopPropagation(); // body 클릭 이벤트 중단
+      if (!isReady) return;
+
+      if (isPaused) {
+        player.playVideo();
+        this.textContent = '⏸';
+        isPaused = false;
+      } else {
+        player.pauseVideo();
+        this.textContent = '▶';
+        isPaused = true;
+      }
+    });
+
+    // 볼륨 슬라이더
+    document.getElementById('volumeSlider').addEventListener('input', function(e) {
+      e.stopPropagation();
+      if (!isReady) return;
+      player.setVolume(this.value);
+    });
+
+    // 컨트롤러 영역 클릭 시 바탕화면 클릭 이벤트 방지
+    document.getElementById('controlsRow').addEventListener('click', function(e) {
+      e.stopPropagation();
+    });
+  </script>
+</body>
+</html>
