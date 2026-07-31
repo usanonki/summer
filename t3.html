@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>클릭하면 유튜브 음악 재생</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 100vw;
+      height: 100vh;
+      background: url('https://usanonki.github.io/photo/rain.gif') no-repeat center center / cover;
+      position: relative;   /* absolute 자식이 기준이 되도록 */
+      cursor: pointer;
+      overflow: hidden;
+      
+      color: #fc0909; /*글자색을 빨간색 혹은 원하는 색으로 변경. 메시지컬러.*/
+      font-family: sans-serif;
+      user-select: none;
+    }
+
+    .message {
+      position: absolute;
+      bottom: 25px;
+      left: 25px;
+      font-size: 1.4rem;
+      opacity: 0.7;
+      transition: opacity 0.4s;
+      z-index: 10;
+    }
+
+    /* 유튜브 플레이어를 완전히 숨김 */
+    #player {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+      z-index: -1;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="message" id="msg">화면 아무 곳이나 클릭하면 음악이 재생됩니다</div>
+
+  <!-- 유튜브가 들어갈 자리 (보이지 않음) -->
+  <div id="player"></div>
+
+  <script>
+    // 유튜브 IFrame API 로드
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    var player;
+    var isPlaying = false;
+
+    // API가 준비되면 호출되는 함수
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player('player', {
+        height: '1',
+        width: '1',
+        videoId: 'jyHki8rh_88',          // 원하는 영상 ID로 바꾸기
+        playerVars: {
+          autoplay: 0,
+          controls: 0,
+          disablekb: 1,
+          fs: 0,
+          modestbranding: 1,
+          rel: 0,
+          showinfo: 0,
+          loop: 1,
+          playlist: 'jyHki8rh_88,WGnwqoZ1Vzc,sBrgQ3yyjzY,MwpyP7luIN4'      // 반복 재생을 위해 필요
+        },
+        events: {
+          'onReady': function(event) {
+            // 준비 완료
+          }
+        }
+      });
+    }
+
+    // 화면 아무 곳이나 클릭했을 때
+    document.body.addEventListener('click', function() {
+      if (!player || isPlaying) return;
+
+      player.playVideo();
+      player.unMute();           // 소리 켜기
+      isPlaying = true;
+
+      // 안내 문구 바꾸기
+      document.getElementById('msg').textContent = '음악이 재생 중입니다...';
+      document.getElementById('msg').style.opacity = '0.4';
+    });
+  </script>
+</body>
+</html>
