@@ -137,11 +137,12 @@
 
   <div id="player"></div>
 
-  <script src="https://www.youtube.com/iframe_api" referrerpolicy="strict-origin-when-cross-origin"></script>
+  <!-- YouTube API -->
+  <script src="https://www.youtube.com/iframe_api"></script>
 
   <script>
-    var player;
-    var isReady = false;
+    let player;
+    let isReady = false;
 
     const videoIds = ['jyHki8rh_88', 'WGnwqoZ1Vzc', 'sBrgQ3yyjzY', 'MwpyP7luIN4'];
 
@@ -151,6 +152,27 @@
     const controlsRow = document.getElementById("controlsRow");
     const msg = document.getElementById("msg");
 
+    /* ------------------------------
+       YouTube API 로드 대기 함수
+    ------------------------------ */
+    function waitForYouTubeAPI(callback) {
+      if (window.YT && YT.Player) {
+        callback();
+      } else {
+        setTimeout(() => waitForYouTubeAPI(callback), 50);
+      }
+    }
+
+    /* ------------------------------
+       API 준비되면 초기화 실행
+    ------------------------------ */
+    waitForYouTubeAPI(() => {
+      onYouTubeIframeAPIReady();
+    });
+
+    /* ------------------------------
+       YouTube 플레이어 초기화
+    ------------------------------ */
     function onYouTubeIframeAPIReady() {
       player = new YT.Player('player', {
         height: '1',
@@ -167,10 +189,11 @@
         events: {
           'onReady': function () {
             isReady = true;
+
             trackList.classList.add('show');
             controlsRow.classList.add('show');
-            player.setVolume(40);
 
+            player.setVolume(40);
             player.setLoop(true);
 
             player.cuePlaylist({
@@ -211,6 +234,9 @@
       });
     }
 
+    /* ------------------------------
+       곡 클릭 → 해당 곡 재생
+    ------------------------------ */
     document.querySelectorAll('#trackList div').forEach((item, index) => {
       item.addEventListener('click', function (e) {
         e.stopPropagation();
@@ -219,11 +245,17 @@
       });
     });
 
+    /* ------------------------------
+       볼륨 조절
+    ------------------------------ */
     volumeSlider.addEventListener('input', function () {
       if (!isReady) return;
       player.setVolume(this.value);
     });
 
+    /* ------------------------------
+       재생/일시정지 버튼
+    ------------------------------ */
     btn.addEventListener("click", function (e) {
       e.stopPropagation();
       if (!isReady) return;
@@ -238,3 +270,8 @@
   </script>
 </body>
 </html>
+
+     
+  
+                 
+    
