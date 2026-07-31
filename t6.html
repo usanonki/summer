@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>클릭하면 유튜브 음악 재생</title>
+  <style>
+    body {
+      width: 100vw;
+      height: 100vh;
+      background: url('https://usanonki.github.io/photo/kasa.gif') no-repeat center center / cover;
+      cursor: pointer;
+      overflow: hidden;
+      font-family: sans-serif;
+      user-select: none;
+    }
+
+    .message {
+      position: absolute;
+      bottom: 25px;
+      left: 25px;
+      font-size: 1.1rem;
+      background: rgba(0, 0, 0, 0.28);
+      padding: 6px 12px;
+      border-radius: 8px;
+      backdrop-filter: blur(2px);
+      opacity: 0.8;
+      transition: opacity 0.4s;
+      z-index: 10;
+    }
+
+    .track-list {
+      position: absolute;
+      bottom: 70px;
+      left: 25px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1.2s ease, transform 1.2s ease;
+    }
+    .track-list.show {
+      opacity: 0.85;
+      transform: translateY(0);
+    }
+    .track-list div {
+      opacity: 0;
+      transform: translateX(-10px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .track-list.show div {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .track-list.show div:nth-child(1) { transition-delay: 0.1s; }
+    .track-list.show div:nth-child(2) { transition-delay: 0.25s; }
+    .track-list.show div:nth-child(3) { transition-delay: 0.4s; }
+    .track-list.show div:nth-child(4) { transition-delay: 0.55s; }
+
+    .track-list div:hover {
+      transform: translateX(6px) scale(1.05);
+      color: #ffe9a8;
+      opacity: 1;
+    }
+    .track-list div.active {
+      transform: translateX(6px) scale(1.05);
+      color: #f33d06e8;
+      opacity: 1;
+    }
+
+    .controls-row {
+      position: absolute;
+      bottom: 25px;
+      right: 25px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      opacity: 0;
+      transition: opacity 1.5s;
+      z-index: 20;
+    }
+    .controls-row.show {
+      opacity: 0.9;
+    }
+
+    .glass-btn {
+      width: 32px;
+      height: 32px;
+      border: none;
+      border-radius: 50%;
+      background: rgba(255, 254, 254, 0.15);
+      cursor: pointer;
+      transition: 0.25s;
+      backdrop-filter: blur(5px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .glass-btn:hover {
+      background: rgba(255, 255, 255, 0.28);
+      transform: scale(1.12);
+    }
+    .glass-btn:active {
+      transform: scale(0.95);
+    }
+
+    #volumeSlider {
+      width: 150px;
+      cursor: pointer;
+      accent-color: #ffd76b;
+    }
+
+    #player {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+      z-index: -1;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="controls-row" id="controlsRow">
+    <button id="playPauseBtn" class="glass-btn">▶</button>
+    <span style="color:white;">🔊</span>
+    <input type="range" id="volumeSlider" min="0" max="100" value="40">
+  </div>
+
+  <div id="trackList" class="track-list">
+    <div data-id="jyHki8rh_88">사람이 꽃보다 아름다워</div>
+    <div data-id="WGnwqoZ1Vzc">여고시절</div>
+    <div data-id="sBrgQ3yyjzY">추억</div>
+    <div data-id="MwpyP7luIN4">여고졸업반</div>
+  </div>
+
+  <div class="message" id="msg">좋아 하는곡 선택하면 음악이 시작됩니다</div>
+
+  <div id="player"></div>
+
+  <script src="https://www.youtube.com/iframe_api" referrerpolicy="strict-origin-when-cross-origin"></script>
+
+  <script>
+    var player;
+    var isReady = false;
+
+    const videoIds = ['jyHki8rh_88', 'WGnwqoZ1Vzc', 'sBrgQ3yyjzY', 'MwpyP7luIN4'];
+
+    const btn = document.getElementById("playPauseBtn");
+    const volumeSlider = document.getElementById("volumeSlider");
+    const trackList = document.getElementById("trackList");
+    const controlsRow = document.getElementById("controlsRow");
+    const msg = document.getElementById("msg");
+
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player('player', {
+        height: '1',
+        width: '1',
+        playerVars: {
+          autoplay: 0,
+          controls: 0,
+          disablekb: 1,
+          fs: 0,
+          modestbranding: 1,
+          rel: 0,
+          showinfo: 0
+        },
+        events: {
+          'onReady': function () {
+            isReady = true;
+            trackList.classList.add('show');
+            controlsRow.classList.add('show');
+            player.setVolume(40);
+
+            player.setLoop(true);
+
+            player.cuePlaylist({
+              playlist: videoIds,
+              index: 0
+            });
+          },
+
+          'onStateChange': function (event) {
+            if (event.data === YT.PlayerState.PLAYING) {
+              btn.innerHTML = "⏸";
+
+              const currentIndex = player.getPlaylistIndex();
+              const items = document.querySelectorAll('#trackList div');
+
+              items.forEach((item, index) => {
+                if (index === currentIndex) {
+                  item.classList.add('active');
+                  msg.textContent = `♫ ${item.textContent} ♫`;
+                } else {
+                  item.classList.remove('active');
+                }
+              });
+
+            } else if (event.data === YT.PlayerState.PAUSED) {
+              btn.innerHTML = "▶";
+
+            } else if (event.data === YT.PlayerState.ENDED) {
+              btn.innerHTML = "▶";
+
+              const currentIndex = player.getPlaylistIndex();
+              if (currentIndex === videoIds.length - 1) {
+                player.playVideoAt(0);
+              }
+            }
+          }
+        }
+      });
+    }
+
+    document.querySelectorAll('#trackList div').forEach((item, index) => {
+      item.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (!isReady) return;
+        player.playVideoAt(index);
+      });
+    });
+
+    volumeSlider.addEventListener('input', function () {
+      if (!isReady) return;
+      player.setVolume(this.value);
+    });
+
+    btn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      if (!isReady) return;
+
+      const state = player.getPlayerState();
+      if (state === YT.PlayerState.PLAYING) {
+        player.pauseVideo();
+      } else {
+        player.playVideo();
+      }
+    });
+  </script>
+</body>
+</html>
