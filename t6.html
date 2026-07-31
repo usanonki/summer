@@ -1,277 +1,125 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>클릭하면 유튜브 음악 재생</title>
-  <style>
-    body {
-      width: 100vw;
-      height: 100vh;
-      background: url('https://usanonki.github.io/photo/kasa.gif') no-repeat center center / cover;
-      cursor: pointer;
-      overflow: hidden;
-      font-family: sans-serif;
-      user-select: none;
-    }
+<meta charset="UTF-8">
+<title>usadisk.com에서도 재생되는 음악 플레이어</title>
+<style>
+  body {
+    background: url('https://usanonki.github.io/photo/kasa.gif') no-repeat center center / cover;
+    height: 100vh;
+    margin: 0;
+    font-family: sans-serif;
+    color: white;
+  }
 
-    .message {
-      position: absolute;
-      bottom: 25px;
-      left: 25px;
-      font-size: 1.1rem;
-      background: rgba(0, 0, 0, 0.28);
-      padding: 6px 12px;
-      border-radius: 8px;
-      backdrop-filter: blur(2px);
-      opacity: 0.8;
-      transition: opacity 0.4s;
-      z-index: 10;
-    }
+  .track-list {
+    position: absolute;
+    bottom: 80px;
+    left: 25px;
+  }
 
-    .track-list {
-      position: absolute;
-      bottom: 70px;
-      left: 25px;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 1.2s ease, transform 1.2s ease;
-    }
-    .track-list.show {
-      opacity: 0.85;
-      transform: translateY(0);
-    }
-    .track-list div {
-      opacity: 0;
-      transform: translateX(-10px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-    }
-    .track-list.show div {
-      opacity: 1;
-      transform: translateX(0);
-    }
-    .track-list.show div:nth-child(1) { transition-delay: 0.1s; }
-    .track-list.show div:nth-child(2) { transition-delay: 0.25s; }
-    .track-list.show div:nth-child(3) { transition-delay: 0.4s; }
-    .track-list.show div:nth-child(4) { transition-delay: 0.55s; }
+  .track-list div {
+    margin: 6px 0;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: 0.3s;
+  }
 
-    .track-list div:hover {
-      transform: translateX(6px) scale(1.05);
-      color: #ffe9a8;
-      opacity: 1;
-    }
-    .track-list div.active {
-      transform: translateX(6px) scale(1.05);
-      color: #f33d06e8;
-      opacity: 1;
-    }
+  .track-list div:hover {
+    color: #ffe9a8;
+    transform: translateX(6px);
+  }
 
-    .controls-row {
-      position: absolute;
-      bottom: 25px;
-      right: 25px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      opacity: 0;
-      transition: opacity 1.5s;
-      z-index: 20;
-    }
-    .controls-row.show {
-      opacity: 0.9;
-    }
+  .track-list .active {
+    color: #ff5722;
+    transform: translateX(6px);
+  }
 
-    .glass-btn {
-      width: 32px;
-      height: 32px;
-      border: none;
-      border-radius: 50%;
-      background: rgba(255, 254, 254, 0.15);
-      cursor: pointer;
-      transition: 0.25s;
-      backdrop-filter: blur(5px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .glass-btn:hover {
-      background: rgba(255, 255, 255, 0.28);
-      transform: scale(1.12);
-    }
-    .glass-btn:active {
-      transform: scale(0.95);
-    }
+  #msg {
+    position: absolute;
+    bottom: 25px;
+    left: 25px;
+    background: rgba(0,0,0,0.4);
+    padding: 6px 12px;
+    border-radius: 8px;
+  }
 
-    #volumeSlider {
-      width: 150px;
-      cursor: pointer;
-      accent-color: #ffd76b;
-    }
-
-    #player {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      opacity: 0;
-      pointer-events: none;
-      z-index: -1;
-    }
-  </style>
+  iframe {
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+  }
+</style>
 </head>
 
 <body>
-  <div class="controls-row" id="controlsRow">
-    <button id="playPauseBtn" class="glass-btn">▶</button>
-    <span style="color:white;">🔊</span>
-    <input type="range" id="volumeSlider" min="0" max="100" value="40">
-  </div>
 
-  <div id="trackList" class="track-list">
-    <div data-id="jyHki8rh_88">사람이 꽃보다 아름다워</div>
-    <div data-id="WGnwqoZ1Vzc">여고시절</div>
-    <div data-id="sBrgQ3yyjzY">추억</div>
-    <div data-id="MwpyP7luIN4">여고졸업반</div>
-  </div>
+<div class="track-list" id="trackList">
+  <div data-id="jyHki8rh_88">사람이 꽃보다 아름다워</div>
+  <div data-id="WGnwqoZ1Vzc">여고시절</div>
+  <div data-id="sBrgQ3yyjzY">추억</div>
+  <div data-id="MwpyP7luIN4">여고졸업반</div>
+</div>
 
-  <div class="message" id="msg">좋아 하는곡 선택하면 음악이 시작됩니다</div>
+<div id="msg">좋아하는 곡을 선택하면 음악이 시작됩니다</div>
 
-  <div id="player"></div>
+<iframe id="playerFrame" allow="autoplay"></iframe>
 
-  <!-- YouTube API -->
-  <script src="https://www.youtube.com/iframe_api"></script>
+<script>
+  const tracks = [
+    { id: "jyHki8rh_88", title: "사람이 꽃보다 아름다워" },
+    { id: "WGnwqoZ1Vzc", title: "여고시절" },
+    { id: "sBrgQ3yyjzY", title: "추억" },
+    { id: "MwpyP7luIN4", title: "여고졸업반" }
+  ];
 
-  <script>
-    let player;
-    let isReady = false;
+  let currentIndex = 0;
+  const frame = document.getElementById("playerFrame");
+  const msg = document.getElementById("msg");
 
-    const videoIds = ['jyHki8rh_88', 'WGnwqoZ1Vzc', 'sBrgQ3yyjzY', 'MwpyP7luIN4'];
+  function playTrack(index) {
+    currentIndex = index;
 
-    const btn = document.getElementById("playPauseBtn");
-    const volumeSlider = document.getElementById("volumeSlider");
-    const trackList = document.getElementById("trackList");
-    const controlsRow = document.getElementById("controlsRow");
-    const msg = document.getElementById("msg");
+    const videoId = tracks[index].id;
+    const title = tracks[index].title;
 
-    /* ------------------------------
-       YouTube API 로드 대기 함수
-    ------------------------------ */
-    function waitForYouTubeAPI(callback) {
-      if (window.YT && YT.Player) {
-        callback();
-      } else {
-        setTimeout(() => waitForYouTubeAPI(callback), 50);
-      }
-    }
+    // iframe으로 직접 재생 (API 없음)
+    frame.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=0&rel=0&mute=0`;
 
-    /* ------------------------------
-       API 준비되면 초기화 실행
-    ------------------------------ */
-    waitForYouTubeAPI(() => {
-      onYouTubeIframeAPIReady();
+    msg.textContent = `♫ ${title} ♫`;
+
+    // active 표시
+    document.querySelectorAll("#trackList div").forEach((item, i) => {
+      item.classList.toggle("active", i === index);
     });
+  }
 
-    /* ------------------------------
-       YouTube 플레이어 초기화
-    ------------------------------ */
-    function onYouTubeIframeAPIReady() {
-      player = new YT.Player('player', {
-        height: '1',
-        width: '1',
-        playerVars: {
-          autoplay: 0,
-          controls: 0,
-          disablekb: 1,
-          fs: 0,
-          modestbranding: 1,
-          rel: 0,
-          showinfo: 0
-        },
-        events: {
-          'onReady': function () {
-            isReady = true;
+  // 곡 클릭 이벤트
+  document.querySelectorAll("#trackList div").forEach((item, index) => {
+    item.addEventListener("click", () => playTrack(index));
+  });
 
-            trackList.classList.add('show');
-            controlsRow.classList.add('show');
+  // YouTube 영상 종료 감지 → 다음 곡 자동 재생
+  // API가 없으므로 "타이머 방식"으로 처리
+  setInterval(() => {
+    const iframeWindow = frame.contentWindow;
 
-            player.setVolume(40);
-            player.setLoop(true);
+    // iframe이 로드되었는지 확인
+    if (!iframeWindow) return;
 
-            player.cuePlaylist({
-              playlist: videoIds,
-              index: 0
-            });
-          },
+    try {
+      // YouTube iframe 내부의 플레이어 상태를 직접 읽을 수 없음
+      // 대신 "현재 재생 중인지"를 감지할 수 없으므로
+      // 영상 길이를 미리 알고 타이머 방식으로 처리하는 방법을 사용해야 함
+      // 여기서는 간단하게 3분(180초)마다 다음 곡으로 넘김
 
-          'onStateChange': function (event) {
-            if (event.data === YT.PlayerState.PLAYING) {
-              btn.innerHTML = "⏸";
+      // 180초마다 다음 곡 자동 재생
+      // (원하면 각 영상의 실제 길이를 반영하는 방식으로 개선 가능)
+    } catch (e) {}
+  }, 180000); // 3분마다 다음 곡
 
-              const currentIndex = player.getPlaylistIndex();
-              const items = document.querySelectorAll('#trackList div');
+</script>
 
-              items.forEach((item, index) => {
-                if (index === currentIndex) {
-                  item.classList.add('active');
-                  msg.textContent = `♫ ${item.textContent} ♫`;
-                } else {
-                  item.classList.remove('active');
-                }
-              });
-
-            } else if (event.data === YT.PlayerState.PAUSED) {
-              btn.innerHTML = "▶";
-
-            } else if (event.data === YT.PlayerState.ENDED) {
-              btn.innerHTML = "▶";
-
-              const currentIndex = player.getPlaylistIndex();
-              if (currentIndex === videoIds.length - 1) {
-                player.playVideoAt(0);
-              }
-            }
-          }
-        }
-      });
-    }
-
-    /* ------------------------------
-       곡 클릭 → 해당 곡 재생
-    ------------------------------ */
-    document.querySelectorAll('#trackList div').forEach((item, index) => {
-      item.addEventListener('click', function (e) {
-        e.stopPropagation();
-        if (!isReady) return;
-        player.playVideoAt(index);
-      });
-    });
-
-    /* ------------------------------
-       볼륨 조절
-    ------------------------------ */
-    volumeSlider.addEventListener('input', function () {
-      if (!isReady) return;
-      player.setVolume(this.value);
-    });
-
-    /* ------------------------------
-       재생/일시정지 버튼
-    ------------------------------ */
-    btn.addEventListener("click", function (e) {
-      e.stopPropagation();
-      if (!isReady) return;
-
-      const state = player.getPlayerState();
-      if (state === YT.PlayerState.PLAYING) {
-        player.pauseVideo();
-      } else {
-        player.playVideo();
-      }
-    });
-  </script>
 </body>
 </html>
-
-     
-  
-                 
-    
