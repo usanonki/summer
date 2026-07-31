@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Playlist</title>
+
+  <!-- Font Awesome 아이콘 -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: url('https://usanonki.github.io/photo/rain.gif') no-repeat center center;
+      background-size: cover;
+      overflow: hidden;
+      font-family: sans-serif;
+      color: #f5f5f5;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+    }
+
+    .player-ui {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      background: rgba(155, 230, 141, 0.15);
+      padding: 18px 22px 20px;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    }
+
+    h1 {
+      margin: 0 0 8px 0;
+      font-size: clamp(16px, 4.5vmin, 24px);
+    }
+
+    .track-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      line-height: 1.2;
+      text-align: left;
+    }
+
+    .track-list li {
+      margin: 2px 0;
+      cursor: pointer;
+      transition: color 0.3s, font-weight 0.3s;
+      font-size: clamp(12px, 2.2vmin, 18px);
+    }
+
+    .track-list li:hover {
+      color: #ffffff;
+    }
+
+    .track-list li.active {
+      color: #ffe566;
+      font-weight: bold;
+    }
+
+    /* 버튼 크기 축소 버전 */
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .controls button {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      transition: background 0.2s, transform 0.1s;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+    }
+
+    #playPauseBtn {
+      width: 44px;
+      height: 44px;
+      font-size: 20px;
+    }
+
+    .controls button:hover {
+      transform: scale(1.05);
+    }
+
+    .controls button:active {
+      transform: scale(0.92);
+    }
+
+    /* 프리셋 1: Light */
+    .btn-light {
+      background: rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    /* 프리셋 2: Neon */
+    .btn-neon {
+      background: rgba(0, 255, 200, 0.25);
+      color: #00ffc8;
+      border: 1px solid rgba(0, 255, 200, 0.6);
+      text-shadow: 0 0 6px rgba(0, 255, 200, 0.8);
+    }
+
+    /* 프리셋 3: Dark */
+    .btn-dark {
+      background: rgba(0, 0, 0, 0.45);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    /* 볼륨 컨테이너 (Flexbox 적용) */
+.volume-container {
+  display: flex;
+  align-items: center;  /* 세로 중앙 정렬 */
+  gap: 10px;            /* 아이콘과 볼륨바 사이 간격 */
+  margin-top: 14px;
+}
+
+/* 볼륨 아이콘 스타일 */
+#volumeIcon {
+  font-size: 16px;
+  cursor: pointer;
+  width: 20px;          /* 아이콘 교체 시 위치 흔들림 방지 */
+  text-align: center;
+  transition: opacity 0.2s;
+}
+
+#volumeIcon:hover {
+  opacity: 0.8;
+}
+
+/* 기존 #volumeBar 스타일에서 margin-top만 제거 */
+#volumeBar {
+  width: 120px;
+  cursor: pointer;
+  accent-color: #e9d26f; /* 부드러운 노란색 (재생 중인 곡 색상과 통일) */
+}
+  </style>
+</head>
+<body>
+
+  <div class="player-ui">
+    <h1>🎵 Playlist</h1>
+
+    <ul class="track-list" id="trackList">
+      <li>목포의 눈물</li>
+      <li>보슬비 오는 거리</li>
+      <li>Delilah</li>
+      <li>Rain Rain</li>
+    </ul>
+
+    <audio id="musicPlayer"></audio>
+
+    <div class="controls">
+      <button id="prevBtn"><i class="fa-solid fa-backward"></i></button>
+      <button id="playPauseBtn"><i class="fa-solid fa-play"></i></button>
+      <button id="nextBtn"><i class="fa-solid fa-forward"></i></button>
+    </div>
+
+    <!-- 🔊 볼륨 컨트롤 영역 (아이콘 + 볼륨바) -->
+<div class="volume-container">
+  <i class="fa-solid fa-volume-high" id="volumeIcon"></i>
+  <input type="range" id="volumeBar" min="0" max="1" step="0.01" value="0.4">
+</div>
+
+  <script>
+    /* ============================
+    ✔ 프리셋 선택
+    ============================ */
+const PRESET = "light";   // "light" / "neon" / "dark"
+
+function applyPreset() {
+  const prev = document.getElementById("prevBtn");
+  const play = document.getElementById("playPauseBtn");
+  const next = document.getElementById("nextBtn");
+
+  prev.classList.add(`btn-${PRESET}`);
+  play.classList.add(`btn-${PRESET}`);
+  next.classList.add(`btn-${PRESET}`);
+}
+
+applyPreset();
+
+
+/* ============================
+    ✔ 오디오 플레이어 기능
+    ============================ */
+const playlist = [
+  { title: "목포의 눈물", url: "https://usanonki.github.io/music/mokpo.mp3" },
+  { title: "보슬비 오는 거리", url: "https://a.tumblr.com/tumblr_rhgq19fON01u1c95ho1.mp3" },
+  { title: "Delilah", url: "https://64.media.tumblr.com/8848ce61ce7bb8363aa228301350826c/74ea5497f70ba389-bc/19c6967c81518f7305f4fa41529b644358a0624b.mp3" },
+  { title: "Rain Rain", url: "https://blog.kakaocdn.net/dn/cGszoY/btsIfeBLSkE/GcKiHgFHwil0podXKiqTjK/tfile.mp3" }
+];
+
+let currentIndex = 0;
+const player = document.getElementById("musicPlayer");
+const trackListItems = document.querySelectorAll("#trackList li");
+const playPauseBtn = document.getElementById("playPauseBtn");
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
+const volumeBar = document.getElementById("volumeBar");
+
+function playTrack(index) {
+  currentIndex = (index + playlist.length) % playlist.length;
+  player.src = playlist[currentIndex].url;
+  player.play();
+  updateActiveTrack(currentIndex);
+}
+
+function updateActiveTrack(index) {
+  trackListItems.forEach((item, i) => {
+    item.classList.toggle("active", i === index);
+  });
+}
+
+function togglePlayPause() {
+  if (player.paused) {
+    player.play();
+  } else {
+    player.pause();
+  }
+}
+
+player.addEventListener("play", () => {
+  playPauseBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+});
+
+player.addEventListener("pause", () => {
+  playPauseBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+});
+
+// 재생/일시정지 버튼
+playPauseBtn.addEventListener("click", togglePlayPause);
+
+
+/* ============================
+    ✔ 페이드 효과 개선 (볼륨 에러 방지 & 설정값 반영)
+    ============================ */
+function fadeOut(callback) {
+  let vol = player.volume;
+  const fade = setInterval(() => {
+    // 음수로 내려가 에러(DOMException)가 나는 것을 방지
+    vol = Math.max(0, vol - 0.04); 
+    player.volume = vol;
+    
+    if (vol === 0) {
+      clearInterval(fade);
+      callback();  // 다음 곡 재생 호출
+    }
+  }, 40);
+}
+
+function fadeIn() {
+  let vol = 0;
+  // 하드코딩된 0.4 대신, 사용자가 맞춘 현재 볼륨 슬라이더 값 가져오기
+  const targetVolume = parseFloat(volumeBar.value); 
+  player.volume = 0;
+  
+  const fade = setInterval(() => {
+    // 목표 볼륨을 넘지 않도록 방지
+    vol = Math.min(targetVolume, vol + 0.04); 
+    player.volume = vol;
+    
+    if (vol >= targetVolume) {
+      clearInterval(fade);
+    }
+  }, 40);
+}
+
+
+/* ============================
+    ✔ 이벤트 리스너 통합 적용
+    ============================ */
+// 1. 리스트 아이템 클릭 시
+trackListItems.forEach((item, index) => {
+  item.addEventListener("click", () => {
+    if (currentIndex === index) {
+      // 이미 선택돼 있는 곡(특히 첫 곡)인데 아직 재생 전이라면 바로 재생
+      if (player.paused) {
+        player.play();
+      }
+    } else {
+      fadeOut(() => {
+        playTrack(index);
+        fadeIn();
+      });
+    }
+  });
+});
+
+// 2. 이전 곡, 다음 곡, 곡 종료 시
+prevBtn.addEventListener("click", () => {
+  fadeOut(() => {
+    playTrack(currentIndex - 1);
+    fadeIn();
+  });
+});
+
+nextBtn.addEventListener("click", () => {
+  fadeOut(() => {
+    playTrack(currentIndex + 1);
+    fadeIn();
+  });
+});
+
+player.addEventListener("ended", () => {
+  fadeOut(() => {
+    playTrack(currentIndex + 1);
+    fadeIn();
+  });
+});
+
+/* ============================
+    ✔ 초기화
+    ============================ */
+player.src = playlist[currentIndex].url;
+player.volume = volumeBar.value; // 초기 볼륨도 슬라이더 값 기준으로 맞춤
+updateActiveTrack(currentIndex);
+
+// 🔊 볼륨 조절 기능
+const volumeIcon = document.getElementById("volumeIcon");
+let lastVolume = 0.4; // 음소거 해제 시 복구할 볼륨 기억
+
+// 볼륨 크기에 따라 아이콘 변경하는 함수
+function updateVolumeIcon(vol) {
+  volumeIcon.className = "fa-solid "; // 기존 클래스 초기화
+  
+  if (vol === 0) {
+    volumeIcon.classList.add("fa-volume-xmark"); // 🔇 음소거
+  } else if (vol < 0.3) {
+    volumeIcon.classList.add("fa-volume-off");   // 🔈 작은 볼륨
+  } else if (vol < 0.7) {
+    volumeIcon.classList.add("fa-volume-low");   // 🔉 중간 볼륨
+  } else {
+    volumeIcon.classList.add("fa-volume-high");  // 🔊 큰 볼륨
+  }
+}
+
+// 볼륨 슬라이더 조절 시 아이콘 업데이트 (중복 리스너 제거, 하나로 통합)
+volumeBar.addEventListener("input", () => {
+  const vol = parseFloat(volumeBar.value);
+  player.volume = vol;
+  updateVolumeIcon(vol);
+});
+
+// 아이콘 클릭 시 음소거 / 음소거 해제 토글
+volumeIcon.addEventListener("click", () => {
+  if (player.volume > 0) {
+    lastVolume = player.volume; // 현재 볼륨 저장
+    player.volume = 0;
+    volumeBar.value = 0;
+    updateVolumeIcon(0);
+  } else {
+    player.volume = lastVolume; // 이전 볼륨으로 복구
+    volumeBar.value = lastVolume;
+    updateVolumeIcon(lastVolume);
+  }
+});
+
+  </script>
+</body>
+</html>
