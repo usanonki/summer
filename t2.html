@@ -368,6 +368,15 @@ volumeIcon.addEventListener("click", () => {
     updateVolumeIcon(lastVolume);
   }
 });
+
+    window.addEventListener("load", () => {
+  player.volume = 0;
+  player.play().then(() => {
+    player.pause();
+    player.volume = volumeBar.value;
+  }).catch(() => {});
+});
+
   </script>
 </body>
 </html>
