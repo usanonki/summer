@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>Balsam</title>
+<style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+
+  /* 전체 화면 영상 */
+  .video-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .video-bg iframe {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* 텍스트 컨테이너 (위치 설정) */
+  .text-container {
+    position: absolute;
+    top: 50%;       /* 화면 중간 */
+    left: 10%;      /* 왼쪽으로 */
+    transform: translateY(-50%);
+    width: 40%;
+  }
+
+  /* 텍스트 오버레이 (3단 공통 스타일) */
+  .overlay-text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    color: #FAFAED;
+    font-size: 1.15rem;
+    line-height: 2.4rem;
+    font-weight: 500; /* 글자 두께를 살짝 올려 가독성 확보 */
+    /* 텍스트 가독성을 위한 다중 그림자 효과 */
+    text-shadow: 
+    0 0 10px rgba(0, 0, 0, 0.9),
+    0 0 20px rgba(0, 0, 0, 0.7);
+    
+    /* (선택) 글자 뒤에 은은한 반투명 어두운 배경 박스를깔고 싶을 때 */
+    /* background: rgba(0, 0, 0, 0.35); */
+    /* padding: 20px; */
+    /* border-radius: 8px; */
+    opacity: 0; /* 기본 상태: 안 보임 */
+    
+    /* 
+      총 주기: 60초 (20초 x 3단)
+      만약 30초씩 보이고 싶다면 아래 60s를 90s로 변경하세요.
+    */
+    animation: fadeCycle 60s infinite ease-in-out;
+  }
+
+  /* 단락별 시작 지연 시간 (20초 간격) */
+  .step-1 { animation-delay: 0s; }
+  .step-2 { animation-delay: 20s; } /* 30초 설정 시: 30s */
+  .step-3 { animation-delay: 40s; } /* 30초 설정 시: 60s */
+
+  /* 
+    20초 유지 애니메이션 (전체 60초의 33.3%가 한 단락의 지분)
+  */
+  @keyframes fadeCycle {
+    0% { opacity: 0; }
+    2% { opacity: 1; }      /* 약 1.2초 동안 Fade In */
+    31% { opacity: 1; }     /* 약 17.5초 동안 글자 100% 유지 */
+    33.3% { opacity: 0; }   /* 약 1.3초 동안 Fade Out 후 꺼짐 */
+    100% { opacity: 0; }    /* 남은 40초 동안은 대기 */
+  }
+</style>
+</head>
+
+<body>
+
+<div class="video-bg">
+  <iframe 
+    src="https://www.youtube.com/embed/NT_uFKLx_9g?autoplay=1" 
+    width="640" 
+    height="360"
+    frameborder="0"
+    allow="autoplay"
+    allowfullscreen>
+  </iframe>
+</div>
+
+<!-- 텍스트 영역 -->
+<div class="text-container">
+  <!-- 1단 -->
+  <div class="overlay-text step-1">
+    여름의 끝자락, 노을빛 머물던 마루에<br>
+    어머니는 가만히 봉숭아 꽃잎을 따 오셨죠.<br>
+    누님의 수줍은 작은 손가락 위로<br>
+    피어나는 붉은 빛이 마냥 아련했습니다.
+  </div>
+
+  <!-- 2단 -->
+  <div class="overlay-text step-2">
+    조심스레 묶어두었던 실타래 풀리면<br>
+    시간마저 천천히 붉게 물들어 가고<br>
+    손톱 끝에 차오르던 그 고운 마음은<br>
+    계절을 지나 어느새 내 가슴에 스며듭니다.
+  </div>
+
+  <!-- 3단 -->
+  <div class="overlay-text step-3">
+    아득히 먼 날의 따스했던 그 온기는<br>
+    세월이 아물어도 바래지 않은 채<br>
+    오늘도 내 가만히 숨쉬는 기억 속에서<br>
+    여전히 시들지 않는 꽃처럼 살아있습니다.
+  </div>
+</div>
+
+</body>
+</html>
