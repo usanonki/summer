@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>이승재 : 아득히 먼곳</title>
+
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    background: #121212;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+  }
+
+  /* 전체 카드 */
+  .player-card {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    background: #000;
+    overflow: hidden; /* usadisk 안정화 */
+  }
+
+  /* 영상 */
+  .player-card video {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* 영상 위 제목 오버레이 */
+  .title-overlay {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 1rem;
+    color: #ffffff;
+    text-shadow: 0 0 6px rgba(0,0,0,0.8);
+    pointer-events: none; /* 클릭 방해 없음 */
+  }
+</style>
+</head>
+
+<body>
+
+<div class="player-card">
+  <video controls preload="metadata">
+    <source src="https://64.media.tumblr.com/370f5445222727c758127c2d72364774/f09b2657b764796a-70/s720/2e2877fc718a8ad70da19f8d79dee8facae927f1.mov" type="video/mp4">
+  </video>
+
+  <div class="title-overlay">이승재 : 아득히 먼곳</div>
+</div>
+
+</body>
+</html>
