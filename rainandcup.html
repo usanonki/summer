@@ -121,9 +121,12 @@
     <audio id="audio" src="https://usanonki.github.io/music/rainandcup.mp3"></audio>
   </div>
 </div>
-  <script> 
-    const audio = document.getElementById('audio');
-const playBtn = document.getElementById('play-btn');
+<script> 
+  const audio = document.getElementById('audio');
+  const playBtn = document.getElementById('play-btn');
+
+    // 오디오 기본 음량을 40%로 설정
+  audio.volume = 0.4;
 
 playBtn.addEventListener('click', () => {
   if (audio.paused) {
