@@ -53,6 +53,7 @@
   <script>
     const audio = document.getElementById('audio');
     const btn = document.getElementById('play-btn');
+    audio.volume = 0.4;
     btn.onclick = () => {
       if (audio.paused) { audio.play(); btn.textContent = '⏸'; }
       else { audio.pause(); btn.textContent = '▶'; }
