@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title> L'estate sta finendo
+  <title>Righeira(Italian Vocal) - L'estate sta finendo
 </title>
   <style>
     html, body { margin: 0; padding: 0; height: 100%; overflow: hidden;  }
@@ -25,7 +25,8 @@
     */
 
     /* 둥근 오디오 플레이어 - 그대로 유지 */
-    .audio-fixed { position: fixed; right: 140px; bottom: 10px; z-index: 10; }
+    .audio-fixed { position: fixed; right: 100px; bottom: 10px; z-index: 10; display: flex;
+      align-items: center; gap: 10px;}
     .circle-player {
       width: 40px; height: 40px; border-radius: 50%; background: white;
       display: flex; align-items: center; justify-content: center;
@@ -35,6 +36,32 @@
       background: #0c6fe0; color: white; border: none; border-radius: 50%;
       width: 30px; height: 30px; font-size: 20px; cursor: pointer;
       
+    }
+    /* 🔊 음량 박스 */
+    .volume-box {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      position: relative;
+    }
+
+    .vol-icon {
+      font-size: 20px;
+      cursor: pointer;
+      color: #502b02;
+    }
+
+    /* 기본 상태: 슬라이더 숨김 */
+    #volSlider {
+      width: 0;
+      opacity: 0;
+      transition: width 0.3s ease, opacity 0.3s ease;
+    }
+
+    /* 마우스 올리면 슬라이더 확장 */
+    .volume-box:hover #volSlider {
+      width: 120px;
+      opacity: 1;
     }
   </style>
 </head>
@@ -49,6 +76,13 @@
   <div class="audio-fixed">
     <div class="circle-player">
       <button id="play-btn">▶</button>
+    </div>
+      <!-- 🔊 음량 슬라이더 -->
+    <div class="volume-box">
+      <span class="vol-icon">🔊</span>
+      <input type="range" id="volSlider" min="0" max="1" step="0.01">
+    </div>
+
       <audio id="audio" src="https://blog.kakaocdn.net/dn/zBUzS/btsIKTdyLI3/pBbDkXwzlcmNKtX1kP8HS1/tfile.mp3" preload="none" loop></audio>
     </div>
   </div>
@@ -61,6 +95,10 @@
       if (audio.paused) { audio.play(); btn.textContent = '⏸'; }
       else { audio.pause(); btn.textContent = '▶'; }
     };
+    // 볼륨 조절
+    volSlider.addEventListener('input', () => {
+      audio.volume = volSlider.value;
+    });
   </script>
 </body>
 </html>
