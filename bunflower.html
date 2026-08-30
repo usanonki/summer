@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>분꽃이 피는 시간</title>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600&display=swap');
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+  }
+
+  body {
+    overflow: hidden;
+    background: #07150d;
+    font-family: "Noto Serif KR", "Nanum Myeongjo", "Batang", serif;
+  }
+
+  /* 배경 사진 */
+  .background {
+    position: fixed;
+    inset: 0;
+    background-image: url("https://usanonki.github.io/photo/bunflower.jpg");
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    transform: scale(1.02);
+    animation: slowZoom 18s ease-in-out infinite alternate;
+  }
+
+  /* 글자가 놓이는 왼쪽 영역을 조금 어둡게 */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background:
+      linear-gradient(
+        90deg,
+        rgba(0, 15, 8, 0.72) 0%,
+        rgba(0, 15, 8, 0.48) 34%,
+        rgba(0, 15, 8, 0.10) 68%,
+        rgba(0, 0, 0, 0.05) 100%
+      );
+  }
+
+  .content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 5vh 7vw;
+  }
+
+  .poem {
+    width: min(680px, 86vw);
+    text-align: left;
+  }
+
+  .title {
+    color: #f7c7d9;
+    font-size: clamp(1.7rem, 3.1vw, 2.8rem);
+    font-weight: 500;
+    letter-spacing: 0.10em;
+    margin-bottom: 2.2rem;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.65);
+  }
+
+  .line {
+    color: #fff4e8;
+    font-size: clamp(1.05rem, 2vw, 1.65rem);
+    line-height: 2.05;
+    letter-spacing: 0.035em;
+    text-shadow:
+      0 2px 8px rgba(0,0,0,0.85),
+      0 0 18px rgba(0,0,0,0.45);
+  }
+
+  /* 한 단락씩 표시 */
+  .stanza {
+    display: none;
+    opacity: 0;
+  }
+
+  .stanza.active {
+    display: block;
+    animation: fadeInOut 30s ease-in-out forwards;
+  }
+
+  .small {
+    margin-top: 1.8rem;
+    color: rgba(255, 230, 236, 0.82);
+    font-size: clamp(0.8rem, 1.3vw, 1rem);
+    letter-spacing: 0.12em;
+  }
+
+  .audio {
+  position: fixed;
+  z-index: 5;
+  left: 50%;
+  bottom: 12px;
+  transform: translateX(-50%);
+  width: min(480px, 88vw);   /* 길게 */
+  opacity: 0.7;              /* 필요하면 조절 */
+}
+
+audio {
+  width: 100%;
+  height: 28px;              /* 시도용 */
+  transform: scaleY(0.72);   /* 핵심: 세로로 납작하게 */
+  transform-origin: center bottom;
+}
+
+  @keyframes fadeInOut {
+    0%   { opacity: 0; }
+    12%  { opacity: 1; }
+    82%  { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  @keyframes slowZoom {
+    from { transform: scale(1.02); }
+    to   { transform: scale(1.07); }
+  }
+
+  @media (max-width: 700px) {
+    .content {
+      padding: 7vh 8vw;
+      align-items: center;
+    }
+
+    .poem {
+      width: 88vw;
+    }
+
+    .title {
+      margin-bottom: 1.5rem;
+    }
+
+    .line {
+      line-height: 1.9;
+    }
+
+    .overlay {
+      background:
+        linear-gradient(
+          90deg,
+          rgba(0, 15, 8, 0.78) 0%,
+          rgba(0, 15, 8, 0.52) 55%,
+          rgba(0, 15, 8, 0.15) 100%
+        );
+    }
+  }
+</style>
+</head>
+
+<body>
+
+<div class="background"></div>
+<div class="overlay"></div>
+
+<div class="content">
+  <div class="poem">
+
+    <!-- 1 -->
+    <section class="stanza">
+      <div class="title">분꽃이 피는 시간</div>
+      <div class="line">
+        어릴 적 여름이면<br>
+        아버지는 마당 한켠에<br>
+        분꽃을 심으셨다.
+      </div>
+    </section>
+
+    <!-- 2 -->
+    <section class="stanza">
+      <div class="line">
+        낮에는 잎사귀 사이로<br>
+        조용히 숨어 있다가<br>
+        해가 기울 무렵이면<br>
+        분꽃은 하나둘 얼굴을 내밀었다.
+      </div>
+    </section>
+
+    <!-- 3 -->
+    <section class="stanza">
+      <div class="line">
+        아버지가 심어 주신 꽃은<br>
+        세월이 지나도<br>
+        피는가 보다.
+      </div>
+    </section>
+
+    <!-- 4 -->
+    <section class="stanza">
+      <div class="line">
+        지금도 분꽃을 보면<br>
+        꽃보다 먼저<br>
+        그 여름의 마당과<br>
+        아버지의 등이 떠오른다.
+      </div>
+    </section>
+
+    <!-- 5 -->
+    <section class="stanza">
+      <div class="line">
+        그리고 문득 생각한다.<br><br>
+        꽃은 지고 없어져도<br>
+        누군가 심어준 마음은<br>
+        참 오래도 피어 있는 것이라고.
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<div class="audio">
+  <audio id="music"
+         src="https://usanonki.github.io/music/myfather.mp3"
+         controls
+         preload="auto">
+  </audio>
+</div>
+
+<script>
+  const stanzas = document.querySelectorAll(".stanza");
+  const music = document.getElementById("music");
+  music.volume = 0.3;
+
+  let current = 0;
+  const stanzaTime = 30000; // 한 단락 30초
+
+  function showStanza(index) {
+    stanzas.forEach((item, i) => {
+      item.classList.toggle("active", i === index);
+    });
+  }
+
+  function nextStanza() {
+    current = (current + 1) % stanzas.length;
+    showStanza(current);
+  }
+
+  showStanza(current);
+
+  // 30초마다 다음 단락
+  setInterval(nextStanza, stanzaTime);
+
+  /*
+    음악은 텍스트와 독립적으로 재생시키자
+    음악이 3분 30초라면 텍스트는 2분 30초 후
+    다시 첫 단락으로 돌아가게하자
+  */
+  music.addEventListener("ended", () => {
+    music.currentTime = 0;
+    music.play().catch(() => {});
+  });
+</script>
+
+</body>
+</html>
